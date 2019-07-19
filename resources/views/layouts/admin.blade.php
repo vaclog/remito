@@ -10,15 +10,16 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
-   
-    <script src="{{ mix('js/app.js') }}" defer></script>
+    <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+    <script src="{{ asset('js/app.js') }}" defer></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
     <!-- Styles -->
-    <link href="{{ mix('css/app.css') }}" rel="stylesheet"></head>
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+</head>
 <body>
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
@@ -33,14 +34,17 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item">
-                            a
-                        </li>
-                        <li class="nav-item">
-                            b
-                        </li>
-                        <li class="nav-item">
-                            c
+                        <li class="m-menu__item "  aria-haspopup="true">
+                            <a  href="{{ route('roles.index') }}" class="m-menu__link ">
+                                <i class="m-menu__link-icon la la-plus"></i>
+                                <span class="m-menu__link-title">
+                                    <span class="m-menu__link-wrap">
+                                        <span class="m-menu__link-text">
+                                            Roles
+                                        </span>
+                                    </span>
+                                </span>
+                            </a>
                         </li>
 
                     </ul>
