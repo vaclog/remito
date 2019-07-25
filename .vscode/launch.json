@@ -17,6 +17,19 @@
             "program": "${file}",
             "cwd": "${fileDirname}",
             "port": 9000
+        },
+       
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "vuejs: chrome",
+            "url": "http://localhost:8000",
+            "webRoot": "${workspaceFolder}/src",
+            "breakOnLoad": true,
+            "sourceMapPathOverrides": {
+            "webpack:///./src/*": "${webRoot}/*"
+            }
         }
+            
     ]
 }

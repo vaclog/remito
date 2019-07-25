@@ -10,6 +10,11 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
+    <script>
+            window.Laravel = <?php echo json_encode([
+                'csrfToken' => csrf_token(),
+             ]); ?>
+         </script>
    
     <script src="{{ mix('js/app.js') }}" defer></script>
 
@@ -20,7 +25,7 @@
     <!-- Styles -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet"></head>
 <body>
-    <div id="app">
+    
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
@@ -80,10 +85,10 @@
                 </div>
             </div>
         </nav>
-
+        
         <main class="py-4">
-            @yield('content')
+                @yield('content')
         </main>
-    </div>
+    
 </body>
 </html>

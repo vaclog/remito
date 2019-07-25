@@ -1,0 +1,20 @@
+{
+    "folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "C:\\xampp2\\htdocs\\agribiz3"
+		},
+		{
+			"path": "C:\\xampp2\\htdocs\\auth_vots"
+		},
+		{
+			"path": "C:\\xampp2\\htdocs\\laravel-blog"
+		},
+		{
+			"path": "C:\\xampp3\\htdocs\\Laravel-Vue-First-CRUD"
+		}
+	],
+    "settings": {}
+}
