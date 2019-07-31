@@ -32,6 +32,9 @@ class ClientController extends Controller
         
     }
 
+    public function list(Request $request){
+        return new ClientCollection(Client::all());
+    }
 
     public function create()
     {

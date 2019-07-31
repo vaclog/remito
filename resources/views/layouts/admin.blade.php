@@ -33,6 +33,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <!-- Left Side Of Navbar -->
                 <ul class="navbar-nav mr-auto">
+                    @role('admin')
                     <li class="nav-item active"  aria-haspopup="true">
                         <a  href="{{ route('roles.index') }}" class="nav-link">
                             Roles
@@ -49,7 +50,7 @@
                     <li class="nav-item "  aria-haspopup="true">
                         <a href="{{route('customers.index')}}" class="nav-link">Customers</a>
                     </li>
-                        
+                    @endrole
 
                 </ul>
 

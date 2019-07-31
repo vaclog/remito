@@ -26,6 +26,10 @@ Route::middleware(['auth:api', 'verified'])->group(function () {
     // Route::get('/client/edit/{id}', 'ClientController@edit');
     // Route::post('/client/update/{id}', 'ClientController@update');
     // Route::delete('/client/delete/{id}', 'ClientController@delete');
-    // Route::get('/clients', 'ClientController@index');
+    //Route::get('/clients', 'ClientController@list');
 
 });
+
+Route::get('/clients', 'ClientController@list');
+
+Route::get('/customers', 'CustomerController@list');

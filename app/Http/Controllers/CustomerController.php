@@ -8,6 +8,7 @@ use Auth;
 
 
 use Illuminate\Http\Request;
+use App\Http\Resources\CustomerCollection;
 
 class CustomerController extends Controller
 {
@@ -35,6 +36,8 @@ class CustomerController extends Controller
                 ->with('i', ($request->input('page', 1) - 1) * 20);
         
     }
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -174,4 +177,14 @@ class CustomerController extends Controller
         
     }
 
+
+
+    /*
+    * API
+    */
+
+    public function list( Request $request){
+
+        return new CustomerCollection(Customer::all());
+    }
 }

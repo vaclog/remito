@@ -15,15 +15,23 @@
                 'csrfToken' => csrf_token(),
              ]); ?>
          </script>
-   
+        
     <script src="{{ mix('js/app.js') }}" defer></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
 
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@3.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
     <!-- Styles -->
+    
     <link href="{{ mix('css/app.css') }}" rel="stylesheet"></head>
+    <link href="{{ asset('css/stepbystep.css') }}" rel="stylesheet"></head>
+
+   
 <body>
     
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
@@ -68,6 +76,10 @@
                                     {{ Auth::user()->name }} <span class="caret"></span>
                                 </a>
 
+                                @role('admin')
+                                
+                                
+                                @endrole
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
@@ -85,10 +97,14 @@
                 </div>
             </div>
         </nav>
-        
-        <main class="py-4">
-                @yield('content')
-        </main>
+        <div id="app">
+            <main class="py-4">
+                    @yield('content')
+            </main>
+        </div>
     
 </body>
+
+<script src="{{ asset('js/stepbystep.js') }}" defer></script>
+
 </html>
