@@ -46,7 +46,7 @@ trait ExcelTrait
 
         
         $dataArray = $ws->rangeToArray(
-        'A1:'.$lastColumnString.$lastRowIndex,     // The worksheet range that we want to retrieve
+        'A2:'.$lastColumnString.$lastRowIndex,     // The worksheet range that we want to retrieve
         NULL,        // Value that should be returned for empty cells
         TRUE,        // Should formulas be calculated (the equivalent of getCalculatedValue() for each cell)
         TRUE,        // Should values be formatted (the equivalent of getFormattedValue() for each cell)
@@ -65,5 +65,51 @@ trait ExcelTrait
        
         return $filtered;
 
+    }
+
+    public function RemitoPrint(Request $request ){
+
+
+       
+       
+            $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader("Xlsx");
+            $spreadsheet = $reader->load("assets/templates/REMITO_PRINT.xlsx");
+    
+            
+    
+            $worksheet = $spreadsheet->getActiveSheet()->setCellValue("F8", "CONTENEDOR1");
+            $worksheet = $spreadsheet->getActiveSheet()->setCellValue("F2", "00000000000");
+            $worksheet = $spreadsheet->getActiveSheet()->setCellValue("F4", "10-12-2018");
+            $worksheet = $spreadsheet->getActiveSheet()->setCellValue("F15", "1230");
+            $worksheet = $spreadsheet->getActiveSheet()->setCellValue("F16", "2185");
+            $worksheet = $spreadsheet->getActiveSheet()->setCellValue("F17", "28415");
+    
+            $worksheet = $spreadsheet->getActiveSheet()->setCellValue("B22", "26230");
+            $worksheet = $spreadsheet->getActiveSheet()->setCellValue("D22", "16400");
+            $worksheet = $spreadsheet->getActiveSheet()->setCellValue("F22", "42630");
+            \PhpOffice\PhpSpreadsheet\Shared\StringHelper::setDecimalSeparator(',');
+            \PhpOffice\PhpSpreadsheet\Shared\StringHelper::setThousandsSeparator('.');
+           
+            
+    
+    
+            //$ewriter = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+            //$ewriter->save("assets/templates/LSLSL.xlsx");
+            //$this->setHeader('VGM.xlsx');
+    
+            //$ewriter->save('php://output');
+            $writer = new \PhpOffice\PhpSpreadsheet\Writer\Pdf\Mpdf($spreadsheet);
+    
+            $writer->save('c:\Remito.pdf');
+    
+            //dd($writer);
+            return response()->file('Remito.pdf');
+    
+            //$writer = new \PhpOffice\PhpSpreadsheet\Writer\Html($spreadsheet);
+            //$writer->setUseBOM(true);
+    
+            //$writer->save("06featuredemo.htm");
+            
+       
     }
 }

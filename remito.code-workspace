@@ -17,6 +17,12 @@
 		},
 		{
 			"path": "C:\\xampp3\\htdocs\\vue-material-admin-master"
+		},
+		{
+			"path": "C:\\xampp3\\htdocs\\todo-ninja"
+		},
+		{
+			"path": "C:\\xampp3\\htdocs\\vue-todo"
 		}
 	],
     "settings": {}

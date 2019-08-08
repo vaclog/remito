@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\UploadRequest;
 use App\File;
 use App\Product;
+use App\Remito;
 
 use App\Traits\ExcelTrait;
 
@@ -32,7 +33,19 @@ class FileController extends Controller
 
         
         $folder = env('AWS_BUCKET_FOLDER');
-    	$folder = empty($folder)? '' : $folder;
+        $folder = empty($folder)? '' : $folder;
+        //dd(collect($request));
+        if (!$request->hasFile('archivo')){
+            return response()->json( [
+                "error"=> [
+                  "message"=> "No se selecciono el archivo",
+                  "type"=> "OAuthException",
+                  "code"=> 500,
+                  "error_subcode"=> 463,
+                  "fbtrace_id"=> "H2il2t5bn4e"
+                ]
+                ], 500);
+        }
         
         //$path = $request->file('archivo')->store($folder, 's3');
 
@@ -57,16 +70,7 @@ class FileController extends Controller
              return $data;
          });
 
-         //return $wherein;
-         //dd($map);
          
-         /*for ($i =1; $i < $map->count(); $i++){
-            $wherein = $wherein."'".$map[$i]['articulo']."',";
-
-         }*/
-
-         
-         //$wherein =['CACA', 'PEPE'];
          $product = Product::whereIn('codigo',$wherein)
                     ->orderBy('codigo')
                     ->get();
@@ -74,35 +78,24 @@ class FileController extends Controller
 
         $matchs = $this->MatchProducts($map, $product);
 
-        return $matchs;
-         return $product;
-         /*
-         *  Agregar validaciones
-         *      -> Articulos que existan
-         *      ->  cantidades validas > 0
-         * 
-         */
-         
-         /*
-            Si es valido guardo archivo
-            Si es valido grabo archivo
-         */
 
-         /*
-            Mostrar vista 
-         */
-         
-         
-         
+        
+        
+        $respuesta['numero_remito'] = $this->getNextRemito();
+        $respuesta['articulos'] = $matchs;
+        return response()->json($respuesta);
+        
+        
+    }
 
-        return $map;
+    public function getNextRemito(){
+        return (Remito::max('numero_remito') + 1);
+
     }
 
     public function MatchProducts($map, $product_list){
 
-        /*for($i = 1; $i < $map->count(); $i++){
-            $map[$i]['articulo']);
-        }*/
+        
 
         $matchs = $map->map(function ($items, $i) use ($product_list) {
             $data['articulo'] = $items['articulo'];
@@ -112,9 +105,11 @@ class FileController extends Controller
             if ($match){
                 $data['descripcion'] = $match->descripcion;
                 $data['marca'] = $match->marca;
+                $data['product_id'] =$match->id;
             }else {
                 $data['descripcion'] = 'No encontrado';
                 $data['marca'] = 'No encontrado';
+                $data['product_id'] = null;
             }
             return $data;
         });

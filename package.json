@@ -10,17 +10,20 @@
     "watch-poll": "npm run watch -- --watch-poll"
   },
   "dependencies": {
+    "bootstrap-vue": "^2.0.0-rc.27",
+    "moment": "^2.24.0",
     "vue-axios": "^2.1.4",
     "vue-router": "^3.0.7",
     "vue-select": "^3.1.0",
     "vue-stepper-component": "^1.0.0",
+    "vue-the-mask": "^0.11.1",
     "vuetify": "^2.0.0",
     "vuex": "^3.1.1"
   },
   "devDependencies": {
     "@mdi/font": "^3.8.95",
     "axios": "^0.19",
-    "bootstrap": "^4.1.0",
+    "bootstrap": "^4.3.1",
     "cross-env": "^5.1",
     "jquery": "^3.2",
     "laravel-mix": "^4.0.7",
@@ -29,7 +32,7 @@
     "resolve-url-loader": "^2.3.1",
     "sass": "^1.17.4",
     "sass-loader": "^7.1.0",
-    "vue": "^2.5.17",
+    "vue": "^2.6.10",
     "vue-cli-plugin-vuetify": "^0.6.1",
     "vue-template-compiler": "^2.6.10",
     "vuetify-loader": "^1.2.2"

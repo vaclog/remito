@@ -15,6 +15,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+
 Auth::routes(['verify' => true]);
 
 Route::group(['middleware' => ['auth:web']], function() {
@@ -41,6 +43,11 @@ Route::group(['middleware' => ['auth:web']], function() {
     Route::get('/upload', 'FileController@upload');
 
     Route::post('/upload', 'FileController@uploadSubmit');
+    Route::post('/remitos/store', 'RemitoController@store');
+
+    
+
+    Route::resource('remitos', 'RemitoController');
 
 
     Route::resource('files', 'FileController', ['only' => ['store', 'destroy']]);

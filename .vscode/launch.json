@@ -24,12 +24,15 @@
             "request": "launch",
             "name": "vuejs: chrome",
             "url": "http://localhost:8000",
-            "webRoot": "${workspaceFolder}/src",
             "breakOnLoad": true,
+            "webRoot": "${workspaceFolder}/public",
             "sourceMapPathOverrides": {
-            "webpack:///./src/*": "${webRoot}/*"
+                "webpack:///resources/assets/js/*.vue": "${workspaceFolder}/resources/assets/js/*.vue",
+                "webpack:///./resources/assets/js/*.js": "${workspaceFolder}/resources/assets/js/*.js",
+                "webpack:///./node_modules/*": "${workspaceFolder}/node_modules/*"
             }
         }
+            
             
     ]
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Customer;
+use App\Remito;
 
 class HomeController extends Controller
 {
@@ -22,13 +23,18 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index( Request $request)
     {
 
-        $customers = Customer::where('disabled',0)->get();
+        $remitos = Remito::where('disabled',0)->with('customer');
 
-        
-        return view('home', compact('customers'));
+        $remitos = $remitos->paginate(10);
+
+        return view('index',compact('remitos'))
+        ->with('i', ($request->input('page', 1) - 1) * 10);
+
+
+       
         
     }
 }
