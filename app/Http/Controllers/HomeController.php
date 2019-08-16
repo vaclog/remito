@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Customer;
+use App\Remito;
 
 class HomeController extends Controller
 {
@@ -13,7 +15,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'verified']);
     }
 
     /**
@@ -21,8 +23,18 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index( Request $request)
     {
-        return view('home');
+
+        $remitos = Remito::where('disabled',0)->with('customer');
+
+        $remitos = $remitos->paginate(10);
+
+        return view('index',compact('remitos'))
+        ->with('i', ($request->input('page', 1) - 1) * 10);
+
+
+       
+        
     }
 }

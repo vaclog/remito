@@ -1,0 +1,32 @@
+{
+    "folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "C:\\xampp2\\htdocs\\agribiz3"
+		},
+		{
+			"path": "C:\\xampp2\\htdocs\\auth_vots"
+		},
+		{
+			"path": "C:\\xampp2\\htdocs\\laravel-blog"
+		},
+		{
+			"path": "C:\\xampp3\\htdocs\\Laravel-Vue-First-CRUD"
+		},
+		{
+			"path": "C:\\xampp3\\htdocs\\vue-material-admin-master"
+		},
+		{
+			"path": "C:\\xampp3\\htdocs\\todo-ninja"
+		},
+		{
+			"path": "C:\\xampp3\\htdocs\\vue-todo"
+		},
+		{
+			"path": "C:\\xampp2.old\\htdocs\\agribiz3"
+		}
+	],
+    "settings": {}
+}

@@ -5,28 +5,155 @@
  */
 
 require('./bootstrap');
+import '@mdi/font/css/materialdesignicons.css' // Ensure you are using css-loader
+
 
 window.Vue = require('vue');
+import VueRouter from 'vue-router';
+import Vuex from "vuex"
 
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
 
-// const files = require.context('./', true, /\.vue$/i);
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
+import BootstrapVue from 'bootstrap-vue'
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
+Vue.use(BootstrapVue)
 
-const app = new Vue({
-    el: '#app',
-});
+
+
+
+window.Vue.use(VueRouter);
+import VueAxios from 'vue-axios';
+import axios from 'axios';
+
+import App from './App.vue';
+
+Vue.use(VueAxios, axios);
+
+
+
+
+
+
+import ClientIndex from './components/client/ClientIndex.vue';
+import ClientCreate from './components/client/ClientCreate.vue';
+import ClientEdit from './components/client/ClientEdit.vue';
+import ClientHome from './components/client/ClientHome.vue'
+
+import About from './components/about.vue'
+
+import vuetify from './plugins/vuetify';
+Vue.use(vuetify)
+
+
+
+const routes = [
+
+    {
+        name: 'home',
+        path: '/',
+        component: ClientHome
+    },
+    {
+        name: 'create',
+        path: '/create',
+        component: ClientCreate
+    },
+    {
+        name: 'clients',
+        path: '/clients',
+        component: ClientIndex
+    },
+    {
+        name: 'edit',
+        path: '/edit/:id',
+        component: ClientEdit
+    },
+    {
+        name: 'about',
+        path: '/about',
+        component: About
+    }
+];
+
+
+
+const router = new VueRouter({ mode: 'history', base: process.env.BASE_URL, routes: routes })
+
+
+Vue.component('index-item', require('./components/file/itemIndexComponent.vue').default)
+
+
+
+Vue.component('upload-component', require('./components/file/uploadComponent.vue').default);
+Vue.component('select-client', require('./components/file/selectClientComponent.vue').default);
+
+
+Vue.component('transport-data', require('./components/file/transportComponent.vue').default);
+Vue.component('home', require('./components/homeComponent.vue').default);
+
+Vue.component('remito-index', require('./components/remito/index.vue').default);
+
+Vue.component('show', require('./components/remito/Show.vue').default);
+
+
+Vue.component('index_client', require('./components/client/ClientIndex.vue'))
+
+
+Vue.component(
+    'passport-clients',
+    require('./components/passport/Clients.vue').default
+);
+
+Vue.component(
+    'passport-authorized-clients',
+    require('./components/passport/AuthorizedClients.vue').default
+);
+
+Vue.component(
+    'passport-personal-access-tokens',
+    require('./components/passport/PersonalAccessTokens.vue').default
+);
+
+
+
+const store = new Vuex.Store({
+    state: {
+        count: 11,
+        articulos: {},
+        customer: [],
+        numero_remito: 0,
+        fecha_remito: null
+
+    },
+    mutations: {
+        increment(state) {
+            state.count++
+        },
+        setArticulos(state, array) {
+            state.articulos = array;
+        },
+        setCustomer(state, array) {
+            state.customer = array
+        },
+
+        setNumeroRemito(state, numero_remito) {
+            state.numero_remito = numero_remito;
+        },
+        setFechaRemito(state, fecha) {
+            state.fecha_remito = fecha;
+        }
+
+    }
+})
+
+const app = new Vue(
+    Vue.util.extend({ router, store, vuetify },
+
+        //App
+        // ClientIndex
+    ),
+
+
+).$mount('#app')

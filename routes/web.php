@@ -15,6 +15,41 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+
+Auth::routes(['verify' => true]);
+
+Route::group(['middleware' => ['auth:web']], function() {
+
+    Route::get('/home', 'HomeController@index')->name('home');
+
+    Route::get('/admin', 'AdminController@index');
+
+    Route::resource('/admin/roles','RoleController');
+
+    Route::resource('/admin/clients', 'ClientController');
+
+    Route::resource('/admin/products', 'ProductController');
+
+    Route::resource('/admin/customers', 'CustomerController');
+
+
+
+    // Route::get('/admin/clients', function () {
+    //     return view('admin.clients.client');
+    //   })->where('any', '.*');
+
+    Route::get('/files', 'FileController@index');
+    Route::get('/upload', 'FileController@upload');
+
+    Route::post('/upload', 'FileController@uploadSubmit');
+    Route::post('/remitos/store', 'RemitoController@store');
+
+    
+
+    Route::resource('remitos', 'RemitoController');
+
+
+    Route::resource('files', 'FileController', ['only' => ['store', 'destroy']]);
+}
+);

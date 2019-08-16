@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>Remito VACLOG WD</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
@@ -64,7 +64,8 @@
         </style>
     </head>
     <body>
-        <div class="flex-center position-ref full-height">
+        
+        <div id="app" class="flex-center position-ref full-height">
             @if (Route::has('login'))
                 <div class="top-right links">
                     @auth
@@ -80,19 +81,23 @@
             @endif
 
             <div class="content">
-                <div class="title m-b-md">
-                    Laravel
+        
+                <div class="row">
+                    </div class="col text-rigth" >
+                        <img src="/assets/VACLOG.jpg" alt="VACLOG GROUP">
+                        <div class="title m-b-md">
+                                REMITOS VACLOG WD
+                            </div>
+                    </div>
                 </div>
+                <div class="row">
+                    <div class="col">
+                        
+                    </div>  
+                </div>
+                
 
-                <div class="links">
-                    <a href="https://laravel.com/docs">Docs</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://blog.laravel.com">Blog</a>
-                    <a href="https://nova.laravel.com">Nova</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
-                </div>
+                
             </div>
         </div>
     </body>

@@ -1,0 +1,38 @@
+{
+    // Use IntelliSense para saber los atributos posibles.
+    // Mantenga el puntero para ver las descripciones de los existentes atributos 
+    // Para más información, visite: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Remito XDEBUG",
+            "type": "php",
+            "request": "launch",
+            "port": 9000
+        },
+        {
+            "name": "Launch currently open script",
+            "type": "php",
+            "request": "launch",
+            "program": "${file}",
+            "cwd": "${fileDirname}",
+            "port": 9000
+        },
+       
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "vuejs: chrome",
+            "url": "http://localhost:8000",
+            "breakOnLoad": true,
+            "webRoot": "${workspaceFolder}/public",
+            "sourceMapPathOverrides": {
+                "webpack:///resources/assets/js/*.vue": "${workspaceFolder}/resources/assets/js/*.vue",
+                "webpack:///./resources/assets/js/*.js": "${workspaceFolder}/resources/assets/js/*.js",
+                "webpack:///./node_modules/*": "${workspaceFolder}/node_modules/*"
+            }
+        }
+            
+            
+    ]
+}

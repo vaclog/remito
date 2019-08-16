@@ -13,6 +13,29 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+
+
+
+Auth::routes(['verify' => true]);
+Route::middleware(['auth:api', 'verified'])->group(function () {
+    // Comments
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+    
+
+    
+
+
 });
+
+Route::post('/test', 'RemitoController@test');
+
+Route::get('/clients', 'ClientController@list');
+
+Route::get('/customers', 'CustomerController@list');
+
+Route::get('/remito', 'RemitoController@detail');
+
+Route::get('/remito/print', 'RemitoController@print');
+
