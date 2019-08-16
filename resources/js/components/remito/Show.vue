@@ -218,16 +218,8 @@ export default {
                 });
             },
         imprimir(e){
-           
-            axios.post('/api/remito/print/' + this.id, {id: this.id})
-                .then((response)=>{
-                    console.log(response)
-                })
-                .catch(e => {
-                    console.log(e)
-                    this.error_msg = e.response.data.message
-                    this.error_flg = true
-                })
+           window.open('/api/remito/print?id=' + this.id)
+            
 
             
         }

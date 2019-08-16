@@ -9,6 +9,7 @@ use App\RemitoArticulo;
 use Auth;
 use App\Traits\ExcelTrait;
 use Illuminate\Support\Facades\DB;
+use \Mpdf\Mpdf;
 
 
 
@@ -83,8 +84,19 @@ class RemitoController extends Controller
 
     public function print(Request $request){
 
+       $remito = Remito::where('id', $request->id)->with('customer', 'articulos')->first();
+
+       return $this->RemitoPrint($request, $remito);
+
+       //return $this->test1($remito);
        
-        return $this->RemitoPrint($request);
-       
+    }
+
+    public function print2 (Request $request){
+        
+        $mpdf = new Mpdf();
+        $mpdf->WriteHTML('<div class="row"><div class="col-6"><h1 class="text-center">Hello world! </h1></div><div class="col-6"><h1 class="text-center">Hello world! 22 </h1></div></div>');
+        
+        $mpdf->Output();
     }
 }

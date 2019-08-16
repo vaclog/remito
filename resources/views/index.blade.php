@@ -45,6 +45,8 @@
                 
                 @can('role-edit')
                     <a class="btn btn-primary btn-sm" href="{{ route('remitos.show',$remito->id) }}">Detalle</a>
+                    <a class="btn btn-success btn-sm" href="{{ url('/api/remito/print?id='.$remito->id) }}">Imprimir</a>
+
                 @endcan
                     
       
