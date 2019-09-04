@@ -89,7 +89,7 @@ class FileController extends Controller
     }
 
     public function getNextRemito(){
-        return (Remito::max('numero_remito') + 1);
+        return (Remito::where('disabled' , 0)->max('numero_remito') + 1);
 
     }
 

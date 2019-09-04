@@ -53,13 +53,7 @@
                                 <h3 class="panel-title">Remito Preview</h3>
                         </div>
                         <div class="panel-body">
-                        
-                            
                             <select-client></select-client>
-
-
-                        
-                        
                             
                         </div>
                         <div class="panel-footer text-right">
@@ -87,3 +81,12 @@
         </v-content>
     </v-app>
 </template>
+
+<script>
+    export default {
+        name: 'home',
+        mounted() {
+            console.log('Component mounted.')
+        }
+    }
+</script>
