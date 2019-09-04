@@ -26,12 +26,12 @@ class HomeController extends Controller
     public function index( Request $request)
     {
 
-        $remitos = Remito::where('disabled',0)->with('customer');
+        $remitos = Remito::where('disabled', 0)->with('customer');
 
-        $remitos = $remitos->paginate(10);
+        $remitos = $remitos->paginate(20);
 
         return view('index',compact('remitos'))
-        ->with('i', ($request->input('page', 1) - 1) * 10);
+        ->with('i', ($request->input('page', 1) - 1) * 20);
 
 
        
