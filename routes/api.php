@@ -37,5 +37,7 @@ Route::get('/customers', 'CustomerController@list');
 
 Route::get('/remito', 'RemitoController@detail');
 
+
+
 Route::get('/remito/print', 'RemitoController@print');
 
