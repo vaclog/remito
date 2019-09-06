@@ -46,15 +46,16 @@ import About from './components/about.vue'
 import vuetify from './plugins/vuetify';
 Vue.use(vuetify)
 
-
+import home from './components/homeComponent.vue';
+Vue.component('home', require('./components/homeComponent.vue').default);
 
 const routes = [
 
-    {
-        name: 'home',
-        path: '/',
-        component: ClientHome
-    },
+    // {
+    //     name: 'home',
+    //     path: '/',
+    //     component: ClientHome
+    // },
     {
         name: 'create',
         path: '/create',
@@ -74,6 +75,11 @@ const routes = [
         name: 'about',
         path: '/about',
         component: About
+    },
+    {
+        name: 'home',
+        path: '/remitos/create',
+        component: home
     }
 ];
 
@@ -91,7 +97,6 @@ Vue.component('select-client', require('./components/file/selectClientComponent.
 
 
 Vue.component('transport-data', require('./components/file/transportComponent.vue').default);
-Vue.component('home', require('./components/homeComponent.vue').default);
 
 Vue.component('remito-index', require('./components/remito/index.vue').default);
 
@@ -124,12 +129,16 @@ const store = new Vuex.Store({
         articulos: {},
         customer: [],
         numero_remito: 0,
-        fecha_remito: null
+        fecha_remito: null,
+        idcliente: null,
 
     },
     mutations: {
         increment(state) {
             state.count++
+        },
+        setClientId(state, array) {
+            state.idcliente = array;
         },
         setArticulos(state, array) {
             state.articulos = array;

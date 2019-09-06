@@ -105,15 +105,17 @@ var today = moment().format('YYYY-MM-DD')
             },
             submit(e){
                 this.loading = true
+
                 // handle login
                 setTimeout(() => {
                     console.log(this)
                 }, 5)
 
-                console.log(e);
+                console.log(this.$store.state.idcliente);
                 this.problema = false;
                 let formData = new FormData();
                 formData.append('archivo', this.archivo);
+                formData.append('client_id', this.$store.state.idcliente);
 
                 axios.post('/upload',
                     formData,
@@ -146,9 +148,10 @@ var today = moment().format('YYYY-MM-DD')
         },
         mounted() {
             this.setFechaRemito(this.fecha)
+            
             console.log('Upload Component mounted.')
         },
         computed:
-            mapState(['count', 'articulos', 'fecha_remito', 'numero_remito']),
+            mapState(['count', 'articulos', 'fecha_remito', 'numero_remito', 'idcliente']),
     }
 </script>

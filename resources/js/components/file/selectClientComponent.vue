@@ -137,7 +137,7 @@ export default {
         }
     },
     created() {
-      let uri = '/api/customers';
+      let uri = '/api/customers/' + this.$route.query.client_id;
       axios.get(uri)
       .then(response => {
         this.customers = response.data.data;

@@ -46,11 +46,8 @@ class FileController extends Controller
                 ]
                 ], 500);
         }
-        
-        //$path = $request->file('archivo')->store($folder, 's3');
-
-        
-        //return $this->read($request);
+        $client_id = $request->input('client_id');
+       
         $excel = collect($this->read($request));
         /*
         * Creo una nueva collection con el articulo y la cantidad
@@ -73,6 +70,7 @@ class FileController extends Controller
          
          $product = Product::whereIn('codigo',$wherein)
                     ->orderBy('codigo')
+                    ->where('client_id', $client_id)
                     ->get();
 
 
@@ -81,15 +79,17 @@ class FileController extends Controller
 
         
         
-        $respuesta['numero_remito'] = $this->getNextRemito();
+        $respuesta['numero_remito'] = $this->getNextRemito($client_id);
         $respuesta['articulos'] = $matchs;
         return response()->json($respuesta);
         
         
     }
 
-    public function getNextRemito(){
-        return (Remito::where('disabled' , 0)->max('numero_remito') + 1);
+    public function getNextRemito($client_id){
+        return (Remito::where('disabled' , 0)
+                ->where('client_id', $client_id)
+                ->max('numero_remito') + 1);
 
     }
 

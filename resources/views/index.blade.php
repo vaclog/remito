@@ -4,16 +4,41 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-lg-12 margin-tb">
+        <div class="col-lg-3 margin-tb">
             <div class="pull-left">
                 <h2>Remitos </h2>
             </div>
-            <div class="text-right p2">
-
-                <a class="btn btn-success" href="{{ route('remitos.create') }}"> Crear un Remito</a>
-
-            </div>
         </div>
+        <div class="col-lg-7">
+        <form>
+            
+                <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-2 col-form-label col-form-label-lg">Cliente</label>
+                    <div class="col-sm-9">
+                        <select class="form-control form-control-lg" id="select_client_id" name="select_cliente_id" placeholder="Seleccione Cliente">
+                        @foreach ($clients as $client)
+                            
+                            <option value="{{ $client->id}}"  {{ $client_selected == $client->id ? "selected" : "" }} >{{$client->razon_social}}</option>
+                        @endforeach
+                        </select>
+                        <input type="hidden" name="client_selected" id="client_selected">
+
+                    </div>
+                    <div class="col-sm-1">
+                        <button type="submit" class="btn btn-primary btn-lg">Go</button>
+                    </div>
+                </div>
+          
+    
+        
+        </form>
+        </div>
+        <div class="col-lg-2 text-right p2">
+
+            <a class="btn btn-success" href="{{ route('remitos.create', [ 'client_id' => $client_selected ]) }}"> Crear un Remito</a>
+
+        </div>
+    
     </div>
 
 
@@ -62,4 +87,18 @@
             
 @endsection
 @section('myjsfiles')
+
+    <script>
+        @if (!empty($client_selected))
+            var ClientId = {{ $client_selected }};
+    
+        @else
+            var ClientId = null;
+        @endif
+        
+        console.log(ClientId);
+    
+    </script>
+    <script src="{{ URL::asset('js/remito/index.js') }}" type="text/javascript"></script>
+
 @endsection

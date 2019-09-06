@@ -11,7 +11,7 @@ use App\Traits\ExcelTrait;
 use Illuminate\Support\Facades\DB;
 use \Mpdf\Mpdf;
 
-
+use App\Client;
 
 class RemitoController extends Controller
 {
@@ -78,15 +78,17 @@ class RemitoController extends Controller
     }
 
     public function create(Request $request){
-
-        return view ('home');
+        
+        $client_id = $request->input('client_id');
+        $client = Client::find($client_id);
+        return view ('home', compact('client'));
     }
 
     public function print(Request $request){
 
        $remito = Remito::where('id', $request->id)->with('customer', 'articulos')->first();
 
-       return $this->RemitoPrint($request, $remito);
+       return $this->RemitoPrintManager($request, $remito);
 
        //return $this->test1($remito);
        
