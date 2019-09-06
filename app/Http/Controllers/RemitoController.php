@@ -11,7 +11,9 @@ use App\Traits\ExcelTrait;
 use Illuminate\Support\Facades\DB;
 use \Mpdf\Mpdf;
 
+use PDF;
 use App\Client;
+
 
 class RemitoController extends Controller
 {
@@ -85,10 +87,18 @@ class RemitoController extends Controller
     }
 
     public function print(Request $request){
+        set_time_limit(0);
 
-       $remito = Remito::where('id', $request->id)->with('customer', 'articulos')->first();
+       $remito = Remito::where('id', $request->id)
+                ->with('customer', 'articulos', 'client')->first();
+        $data = $remito;
+        //return $remito;
+        $pdf = PDF::loadView('templates.remito.orien', compact('data'));
+        return $pdf->stream('remito.pdf');
+        return view('templates.remito.orien', compact('data'));
 
-       return $this->RemitoPrintManager($request, $remito);
+       // Se deja de utilizar para utilizar el DOMPF
+       //return $this->RemitoPrintManager($request, $remito);
 
        //return $this->test1($remito);
        
