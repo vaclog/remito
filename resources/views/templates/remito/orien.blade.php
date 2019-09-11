@@ -381,9 +381,9 @@
                     <td>{{$item['ean13']}}</td>
                     <td>{{$item['lote']}}</td>
                     <td>{{
-                            (strtotime($item['vto'])> 0)?date_format(date_create($item['vto']), 'd/m/Y'):'-'    
+                            (strtotime($item['fecha_vencimiento'])> 0)?date_format(date_create($item['fecha_vencimiento']), 'd/m/Y'):'-'    
                     }}</td>
-                    <td>{{ $item['um']}}</td>
+                    <td>{{ $item['unidad_medida']}}</td>
                     <td class="cantidad">{{$item['cantidad']}}</td>
                 </tr>
 
