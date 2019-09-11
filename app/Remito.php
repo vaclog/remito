@@ -12,7 +12,8 @@ class Remito extends Model
 
     protected $fillable = ['sucursal', 'numero_remito', 'customer_id', 'fecha_remito', 
     'transporte', 'conductor', 'patente', 'calle', 'localidad', 'provincia',
-    'disabled', 'client_id', 'audit_created_by', 'audit_updated_by', 'observaciones'];
+    'disabled', 'client_id', 'audit_created_by', 'audit_updated_by', 'observaciones',
+    'cai', 'cai_vecimiento'];
 
     //
     public function client(){
