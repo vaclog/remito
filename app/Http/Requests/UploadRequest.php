@@ -24,7 +24,8 @@ class UploadRequest extends FormRequest
     public function rules()
     {
         return [
-            'archivo' => 'required'
+            'archivo' => 'required',
+            'client_id' => 'required'
             //
         ];
 

@@ -83,10 +83,24 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import { mapMutations } from 'vuex'
     export default {
         name: 'home',
         mounted() {
-            console.log('Component mounted.')
+            console.log(this.$route.query.client_id)
+            this.setClientId(parseInt(this.$route.query.client_id));
+        },
+        methods: {
+             ...mapMutations(
+                [
+                    'setClientId'
+                ]
+            ),
+
         }
+        ,
+        computed:
+            mapState(['count', 'articulos', 'fecha_remito', 'numero_remito', 'idcliente']),
     }
 </script>

@@ -116,39 +116,29 @@
                     shaped
                     ></v-text-field>
             </div>
+           
             
+        </div>
+        <div class="row">
+            <div class="col">
+                <v-text-field
+                    v-model="observaciones"
+                    label="Observaciones"
+                    readonly
+                    outlined
+                    shaped
+        
+                    ></v-text-field>
+            </div>
         </div>
         
     
         
         
 
-    <v-layout>
-        
-        
-        <table id="firstTable" class="table">
-            <thead>
-                <tr>
-                    <th>Articulo</th>
-                    <th>Descripion</th>
-                    <th>Marca</th>
-                    <th>Cantidad</th>
-                
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="item in items" :key="item.id">
-                <!-- <td>{{item.id}}</td> -->
-                
-                <td  >{{item.codigo}}</td>
-                <td v-bind:class="['alert',(item.descripcion === 'No encontrado')?'alert-danger':'']">{{item.descripcion}}</td>
-                <td>{{item.marca}}</td>
-                <td class="text-right">{{item.cantidad}}</td>
-              
-                </tr>
-            </tbody>
-        </table>
-    </v-layout>
+    
+
+    <index-item></index-item>
         
     
 
@@ -181,14 +171,20 @@ export default {
             remito_id: '',
             fecha: '',
             transport: [],
-            items: [],
             customer: [],
             error_msg: null,
             error_flg: false,
+            observaciones: ''
         }
     },
 
     methods:{
+        ...mapMutations(
+                [
+                    'setArticulos', 'setNumeroRemito', 'setFechaRemito'
+                ]
+            ),
+
         getRemito(id) {
             axios.get('/api/remito?id=' +id)
                 .then((response) => {
@@ -205,13 +201,18 @@ export default {
                     this.customer.calle = response.data.calle
                     this.customer.localidad = response.data.localidad
                     this.customer.provincia = response.data.provincia
+                    this.observaciones = response.data.observaciones
                     this.sucursal = response.data.sucursal
                     this.sucursal = this.sucursal.toString().padStart(4,'0')
                     this.remito_id = response.data.numero_remito.toString().padStart(8, '0')
                     console.log(response.data.fecha_remito)
                     this.fecha = moment(response.data.fecha_remito).format('DD/MM/YYYY')  
                     this.nro_remito = this.sucursal + ' - ' + this.remito_id
-                    this.items = response.data.articulos
+//                    this.articulos = response.data.articulos
+console.log(response.data.articulos)
+                    this.setArticulos(response.data.articulos)
+
+                    this.observaciones = response.data.observaciones
                     
                 }).catch((e) => {
                     console.log(e)
@@ -230,14 +231,6 @@ export default {
         console.log('mounted')
         this.getRemito(this.id)
     },
-
-
-
-    ...mapMutations(
-                [
-                    'setArticulos', 'setNumeroRemito', 'setFechaRemito'
-                ]
-            ),
     computed:
             mapState(['count', 'articulos', 'fecha_remito', 'numero_remito']),
             

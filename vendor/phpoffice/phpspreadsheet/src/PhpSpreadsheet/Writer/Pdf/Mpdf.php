@@ -65,7 +65,10 @@ class Mpdf extends Pdf
         }
 
         //  Create PDF
-        $config = ['tempDir' => $this->tempDir];
+        $config = ['tempDir' => env('PHPOFFICE_TEMP_DIR', '/tmp') ]; 
+        //$this->tempDir];
+
+        //$config = ['tempDir' => $this->tempDir];
         $pdf = $this->createExternalWriterInstance($config);
         $ortmp = $orientation;
         $pdf->_setPageSize(strtoupper($paperSize), $ortmp);

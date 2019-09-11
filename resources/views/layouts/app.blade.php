@@ -25,7 +25,7 @@
     <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
 
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@3.x/css/materialdesignicons.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
     <!-- Styles -->
     
     <link href="{{ mix('css/app.css') }}" rel="stylesheet"></head>
@@ -122,7 +122,15 @@
         </div>
     
 </body>
+<script
+  src="https://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous"></script>
+  <script src="{{ asset('js/stepbystep.js') }}" defer></script>
+@yield('myjsfiles')
 
-<script src="{{ asset('js/stepbystep.js') }}" defer></script>
+@yield('modals')
+
+
 
 </html>

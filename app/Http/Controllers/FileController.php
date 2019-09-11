@@ -11,6 +11,7 @@ use App\Product;
 use App\Remito;
 
 use App\Traits\ExcelTrait;
+use Carbon\Carbon;
 
 
 
@@ -46,33 +47,38 @@ class FileController extends Controller
                 ]
                 ], 500);
         }
-        
-        //$path = $request->file('archivo')->store($folder, 's3');
-
-        
-        //return $this->read($request);
+        $client_id = $request->input('client_id');
+       
         $excel = collect($this->read($request));
         /*
         * Creo una nueva collection con el articulo y la cantidad
         */
         $map = $excel->map(function($items, $i){
             
-                $data['articulo'] = $items['A'];
-                $data['cantidad'] = $items['G'];
+                $data['codigo'] = $items['A']; // Articulo
+                $data['cantidad'] = $items['G'];   // Pickeada
+
+                
+                $fecha_DD_MM_YYYY = date_format(Carbon::createFromFormat('m/d/Y', $items['I']), 'd/m/Y');
+                $data['fecha_vencimiento'] = $fecha_DD_MM_YYYY; // 'DD/MM/YYYY'
+
+                $data['lote'] = $items['J'];
+
                 return $data;
             
          });
 
-         $map = $map->sortBy('articulo');
+         $map = $map->sortBy('codigo');
 
          $wherein = $map->map(function($items, $i){
-             $data[$i] = $items['articulo'];
+             $data[$i] = $items['codigo'];
              return $data;
          });
 
          
          $product = Product::whereIn('codigo',$wherein)
                     ->orderBy('codigo')
+                    ->where('client_id', $client_id)
                     ->get();
 
 
@@ -81,15 +87,17 @@ class FileController extends Controller
 
         
         
-        $respuesta['numero_remito'] = $this->getNextRemito();
+        $respuesta['numero_remito'] = $this->getNextRemito($client_id);
         $respuesta['articulos'] = $matchs;
         return response()->json($respuesta);
         
         
     }
 
-    public function getNextRemito(){
-        return (Remito::where('disabled' , 0)->max('numero_remito') + 1);
+    public function getNextRemito($client_id){
+        return (Remito::where('disabled' , 0)
+                ->where('client_id', $client_id)
+                ->max('numero_remito') + 1);
 
     }
 
@@ -98,18 +106,24 @@ class FileController extends Controller
         
 
         $matchs = $map->map(function ($items, $i) use ($product_list) {
-            $data['articulo'] = $items['articulo'];
+            $data['codigo'] = $items['codigo'];
             $data['cantidad'] = $items['cantidad'];
+            $data['fecha_vencimiento'] = $items['fecha_vencimiento'];
+            $data['lote'] = $items['lote'];
 
-            $match = $product_list->firstWhere('codigo',$data['articulo']);
+            $match = $product_list->firstWhere('codigo',$data['codigo']);
             if ($match){
                 $data['descripcion'] = $match->descripcion;
                 $data['marca'] = $match->marca;
-                $data['product_id'] =$match->id;
+                $data['product_id'] = $match->id;
+                $data['unidad_medida'] = $match->unidad_medida;
+                $data['ean13'] = $match->ean13;
             }else {
                 $data['descripcion'] = 'No encontrado';
                 $data['marca'] = 'No encontrado';
                 $data['product_id'] = null;
+                $data['unidad_medida'] = '-';
+                $data['ean13'] = '-';
             }
             return $data;
         });

@@ -33,7 +33,7 @@ Route::post('/test', 'RemitoController@test');
 
 Route::get('/clients', 'ClientController@list');
 
-Route::get('/customers', 'CustomerController@list');
+Route::get('/customers/{client_id}', 'CustomerController@list');
 
 Route::get('/remito', 'RemitoController@detail');
 

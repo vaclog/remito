@@ -185,6 +185,6 @@ class CustomerController extends Controller
 
     public function list( Request $request){
 
-        return new CustomerCollection(Customer::all());
+        return new CustomerCollection(Customer::where('client_id', $request->client_id)->get());
     }
 }

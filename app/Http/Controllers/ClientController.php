@@ -7,6 +7,7 @@ use App\Client;
 
 use Illuminate\Http\Request;
 use App\Http\Resources\ClientCollection;
+use Carbon\Carbon;
 
 use Auth;
 
@@ -51,6 +52,9 @@ class ClientController extends Controller
     ]);
       $client = new Client([
         'razon_social' => $request->get('razon_social'),
+        'cai' => $request->get('cai'),
+        'sucursal' => $request->get('sucursal'),
+        'cai_vencimiento' => ($request->get('cai_vencimiento'))?date_format(Carbon::createFromFormat('d/m/Y', $request->get('cai_vencimiento')), 'Y-m-d'):null,
         'disabled' => 0
       ]);
 
@@ -75,6 +79,9 @@ class ClientController extends Controller
       $client = Client::find($id);
       //$client->update($request->all());
       $client->razon_social = $request->razon_social;
+      $client->cai = $request->cai;
+      $client->sucursal = $request->sucursal;
+      $client->cai_vencimiento = ($request->get('cai_vencimiento'))?date_format(Carbon::createFromFormat('d/m/Y', $request->get('cai_vencimiento')), 'Y-m-d'):null;
       $client->disabled = ($request->disabled == "on")?1:0;
       $client->audit_created_by = Auth::user()->email;
 

@@ -34,6 +34,9 @@
   <tr>
      <th>No</th>
      <th>Name</th>
+     <th>Sucursal</th>
+     <th>CAI Nro</th>
+     <th>CAI Vencimiento</th>
      <th>Disabled</th>
      <th width="280px">Action</th>
   </tr>
@@ -41,7 +44,10 @@
     <tr>
         <td>{{ ++$i }}</td>
         <td>{{ $client->razon_social }}</td>
-        <td>{{$client->disabled}}</td>
+        <td>{{ str_pad( $client->sucursal, 4, "0", STR_PAD_LEFT) }}</td>
+        <td>{{ $client->cai }} </td>
+        <td style="text-align: center">{{ (strtotime($client->cai_vencimiento)> 0)?date_format(date_create($client->cai_vencimiento), 'd/m/Y'):'' }}</td>
+        <td style="text-align: center">{{ ($client->disabled)?'SI':'NO' }}</td>
         <td>
             
             @can('role-edit')
