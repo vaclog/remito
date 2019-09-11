@@ -52,7 +52,7 @@ class RemitoController extends Controller
             {
                 //dd($item);
                 $articulo = new RemitoArticulo([
-                    'codigo' => $item['articulo'],
+                    'codigo' => $item['codigo'],
                     'descripcion' => $item['descripcion'],
                     'marca' => $item['marca'],
                     'cantidad' => $item['cantidad'],
