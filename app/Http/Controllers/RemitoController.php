@@ -34,7 +34,7 @@ class RemitoController extends Controller
                 'fecha_remito' => $request->fecha_remito,
                 'observaciones' => $request->observaciones,
                 'cai' => $cliente->cai,
-                'cai_vencimiento' => $cliente->$cai_vencimiento,
+                'cai_vencimiento' => $cliente->cai_vencimiento,
                 'customer_id' => $request->customer['id'],
                 'transporte' => $request->transportista['transporte'],
                 'conductor' => $request->transportista['conductor'],
