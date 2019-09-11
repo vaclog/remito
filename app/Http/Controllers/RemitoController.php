@@ -50,9 +50,8 @@ class RemitoController extends Controller
 
             foreach($request->articulos as $item)
             {
-                //dd($item);
                 $articulo = new RemitoArticulo([
-                    'codigo' => $item['articulo'],
+                    'codigo' => $item['codigo'],
                     'descripcion' => $item['descripcion'],
                     'marca' => $item['marca'],
                     'cantidad' => $item['cantidad'],
@@ -81,7 +80,7 @@ class RemitoController extends Controller
 
         return view('show', compact('remito'));
 
-        //return response()->json($remito);
+        
 
     }
 
@@ -105,7 +104,6 @@ class RemitoController extends Controller
         $data = $remito;
 
        
-        //return $remito;
         $pdf = PDF::loadView('templates.remito.orien', compact('data'));
         return $pdf->stream('remito.pdf');
         //return view('templates.remito.orien', compact('data'));
