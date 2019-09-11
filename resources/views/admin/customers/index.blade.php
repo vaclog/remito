@@ -11,7 +11,7 @@
             </div>
             <div class="text-right p-2" >
             
-                <a class="btn btn-success" href="{{ route('products.create') }}"> Create New Customer</a>
+                <a class="btn btn-success" href="{{ route('customers.create') }}"> Create New Customer</a>
             
             </div>
             <form class="p-2" action="{{ route('customers.index')}}" method="GET" role="search">

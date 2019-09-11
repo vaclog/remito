@@ -34,7 +34,7 @@
                 @endif
 
 
-                {!! Form::open(array('route' => 'products.store','method'=>'POST')) !!}
+                {!! Form::open(array('route' => 'customers.store','method'=>'POST')) !!}
                 <div class="row">
                     <div class="col-xs-4 col-sm-4 col-md-4">
                         <div class="form-group">

@@ -36,14 +36,33 @@
 
 {!! Form::model($client, ['method' => 'PATCH','route' => ['clients.update', $client->id]]) !!}
 <div class="row">
-    <div class="col-xs-4 col-sm-4 col-md-4">
+    <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="form-group">
             <strong>Razon Social:</strong>
             {!! Form::text('razon_social', null, array('placeholder' => 'Nombre de la empresa','class' => 'form-control')) !!}
         </div>
+
+        <div class="form-group">
+            <strong>Sucursal:</strong>
+            {!! Form::text('sucursal', null, array('placeholder' => 'Sucursal','class' => 'form-control')) !!}
+        </div>
+        <div class="form-group">
+            <strong>Numero CAI:</strong>
+            {!! Form::text('cai', null, array('placeholder' => 'Numero CAI','class' => 'form-control')) !!}
+        </div>
+        <div class="form-group">
+                <label for="cai_vencimiento"><strong> Vencimiento CAI</strong></label>
+
+            <div class="input-group date">
+                <input type="text" id="cai_vencimiento" name="cai_vencimiento" class="form-control">
+                <span class="input-group-addon">
+                    <i class="glyphicon glyphicon-calendar"></i></span>
+            </div>
+            
+        </div>
     </div>
     
-    <div class="col-xs-4 col-sm-4 col-md-4">
+    <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="form-group">
             <strong>Desactivado:</strong>
             
@@ -65,4 +84,13 @@
 {!! Form::close() !!}
 @endsection
 @section('myjsfiles')
+
+<script type="text/javascript">
+    $('#cai_vencimiento').datepicker({
+        format: "dd/mm/yyyy",
+        language: "es",
+        autoclose: true,
+        todayHighlight: true
+    });
+</script>
 @endsection

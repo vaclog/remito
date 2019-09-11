@@ -29,16 +29,18 @@ trait ExcelTrait
     protected function read(Request $request){
 
         $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader("Xlsx");
+
         $client_id = $request->input('client_id');
         $path= $request->file('archivo')->getRealPath();
         $ws = $reader->load($path)->getActiveSheet();
 
+       
         //dd($ws->getRowDimensions());
 
         $highestRow = $ws->getRowDimensions(); // e.g. 10
         $highestColumn = $ws->getColumnDimensions(); // e.g 'F'
 
-        if(sizeof($highestRow)==0)
+        if(sizeof($highestRow) <= 1)
             $lastRowIndex = 1000;
 
 

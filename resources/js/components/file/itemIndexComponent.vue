@@ -9,7 +9,10 @@
                 <tr>
                     <th>Articulo</th>
                     <th>Descripion</th>
-                    <th>Marca</th>
+                    <th>Ean13</th>
+                    <th>Lote</th>
+                    <th>Fec. Vto</th>
+                    <th>UM</th>
                     <th>Cantidad</th>
                 
                 </tr>
@@ -18,9 +21,13 @@
                 <tr v-for="item in articulos" :key="item.id">
                 <!-- <td>{{item.id}}</td> -->
                 
-                <td  >{{item.articulo}}</td>
+                <td>{{item.codigo}}</td>
                 <td v-bind:class="['alert',(item.descripcion === 'No encontrado')?'alert-danger':'']">{{item.descripcion}}</td>
-                <td>{{item.marca}}</td>
+                <td>{{item.ean13}}</td>
+                <td>{{item.lote}}</td>
+                <td>{{item.fecha_vencimiento}}</td>
+                <td>{{item.unidad_medida}}</td>
+
                 <td class="text-right">{{item.cantidad}}</td>
               
                 </tr>

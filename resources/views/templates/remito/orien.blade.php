@@ -308,7 +308,7 @@
         <table class="observaciones">
             <tr>
                 <td valign="top" style="width:10%">Observaciones:</td>
-                <td class="observaciones-texto" style="width:90%;">Prueba de observaciones</td>
+                <td class="observaciones-texto" style="width:90%;">{{ $data->observaciones }}</td>
 
             </tr>
         </table>
@@ -321,10 +321,10 @@
                     <th style="width: 33%">
                     </th>
                     <th style="width: 33%">
-                        {{-- CAI: 443012146832325 --}}
+                        CAI: {{ $data->cai }}
                     </th>
                     <th style="width: 33%">
-                        {{-- VENCIMIENTO: 21/01/2017 --}}
+                        VENCIMIENTO: {{(strtotime($data->cai_vencimiento)> 0)?date_format(date_create($data->cai_vencimiento), 'd/m/Y'):''}}
                     </th>
                 </tr>
             </thead>
@@ -392,8 +392,9 @@
             </tbody>
             <tfoot class="footer">
                 <tr>
-                    <td colspan="4">TOTAL de LINEAS</td>
-                    <td colspan="3" class="cantidad">{{count($data['articulos'])}}</td>
+                    <td colspan="2">TOTAL de LINEAS</td>
+                    <td colspan="2">{{ count($data['articulos'])  }}</td>
+                    <td colspan="3" class="cantidad">{{$data->articulos->sum('cantidad')}}</td>
                 </tr>
             </tfoot>
         </table>

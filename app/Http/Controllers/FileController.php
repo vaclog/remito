@@ -11,6 +11,7 @@ use App\Product;
 use App\Remito;
 
 use App\Traits\ExcelTrait;
+use Carbon\Carbon;
 
 
 
@@ -54,16 +55,23 @@ class FileController extends Controller
         */
         $map = $excel->map(function($items, $i){
             
-                $data['articulo'] = $items['A'];
-                $data['cantidad'] = $items['G'];
+                $data['codigo'] = $items['A']; // Articulo
+                $data['cantidad'] = $items['G'];   // Pickeada
+
+                
+                $fecha_DD_MM_YYYY = date_format(Carbon::createFromFormat('m/d/Y', $items['I']), 'd/m/Y');
+                $data['fecha_vencimiento'] = $fecha_DD_MM_YYYY; // 'DD/MM/YYYY'
+
+                $data['lote'] = $items['J'];
+
                 return $data;
             
          });
 
-         $map = $map->sortBy('articulo');
+         $map = $map->sortBy('codigo');
 
          $wherein = $map->map(function($items, $i){
-             $data[$i] = $items['articulo'];
+             $data[$i] = $items['codigo'];
              return $data;
          });
 
@@ -98,18 +106,24 @@ class FileController extends Controller
         
 
         $matchs = $map->map(function ($items, $i) use ($product_list) {
-            $data['articulo'] = $items['articulo'];
+            $data['codigo'] = $items['codigo'];
             $data['cantidad'] = $items['cantidad'];
+            $data['fecha_vencimiento'] = $items['fecha_vencimiento'];
+            $data['lote'] = $items['lote'];
 
-            $match = $product_list->firstWhere('codigo',$data['articulo']);
+            $match = $product_list->firstWhere('codigo',$data['codigo']);
             if ($match){
                 $data['descripcion'] = $match->descripcion;
                 $data['marca'] = $match->marca;
-                $data['product_id'] =$match->id;
+                $data['product_id'] = $match->id;
+                $data['unidad_medida'] = $match->unidad_medida;
+                $data['ean13'] = $match->ean13;
             }else {
                 $data['descripcion'] = 'No encontrado';
                 $data['marca'] = 'No encontrado';
                 $data['product_id'] = null;
+                $data['unidad_medida'] = '-';
+                $data['ean13'] = '-';
             }
             return $data;
         });

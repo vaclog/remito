@@ -34,6 +34,16 @@
                     @change="remito.transportista.patente = remito.transportista.patente.toUpperCase()"
                 ></v-text-field>
             </div>
+
+            <div class="form-group">
+                <v-text-field
+                    v-model="remito.observaciones"
+                    
+                    label="Observaciones"
+                    
+                   
+                ></v-text-field>
+            </div>
             <div class="form-group text-right">
     
         <!-- <input class="btn btn-secondary" type="submit"  value="Upload"> -->
@@ -167,6 +177,8 @@ import { mapMutations } from 'vuex'
         remito: {
             numero_remito: '',
             fecha_remito: '',
+            observaciones: '',
+            client_id: '',
             customer: {},
             articulos: {},
             transportista: {
@@ -210,20 +222,20 @@ import { mapMutations } from 'vuex'
 
     methods:{
 
-        getRemito(id) {
-            axios.get('/api/remito?id=' +id)
-                    .then((response) => {
-                        //this.remito = response.data;
-                        console.log(response.data)
-                        this.items = response.data.articulos;
-                        console.log(response.data.articulos)
-                    }).catch((e) => {
-                        console.log(e)
-                    }).then((data) => {
-                        //console.log(this.items)
-                        //this.setArticulos(this.items)
-                    });
-            },
+        // getRemito(id) {
+        //     axios.get('/api/remito?id=' +id)
+        //             .then((response) => {
+        //                 //this.remito = response.data;
+        //                 console.log(response.data)
+        //                 this.items = response.data.articulos;
+        //                 console.log(response.data.articulos)
+        //             }).catch((e) => {
+        //                 console.log(e)
+        //             }).then((data) => {
+        //                 //console.log(this.items)
+        //                 //this.setArticulos(this.items)
+        //             });
+        //     },
         
         submit(e){
                 this.loading = true
@@ -236,6 +248,7 @@ import { mapMutations } from 'vuex'
                 this.remito.numero_remito = this.$store.state.numero_remito
                 this.remito.fecha_remito = this.$store.state.fecha_remito
                 console.log(this.$store.state.fecha_remito)
+                this.remito.client_id = this.$store.state.idcliente
                 var RemitoData = this.remito;
                 
 
@@ -280,7 +293,7 @@ import { mapMutations } from 'vuex'
     beforeMount(){
         if (this.edit){
             console.log(' Before mount')
-            this.getRemito(this.id)
+           // this.getRemito(this.id)
          
         }
         

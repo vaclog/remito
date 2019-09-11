@@ -10,6 +10,8 @@ use Auth;
 use App\Traits\ExcelTrait;
 use Illuminate\Support\Facades\DB;
 use \Mpdf\Mpdf;
+use Carbon\Carbon;
+
 
 use PDF;
 use App\Client;
@@ -19,15 +21,20 @@ class RemitoController extends Controller
 {
     //
     use ExcelTrait;
-    protected $sucursal = 4;
+    
 
     public function store(Request $request){
         $remito = null;
-        DB::transaction(function() use ($request, &$remito) {
+
+        $cliente = Client::find($request->client_id);
+        DB::transaction(function() use ($request, &$remito, $cliente) {
             $remito = Remito::create([
-                'sucursal' => $this->sucursal,
+                'sucursal' => $cliente->sucursal,
                 'numero_remito' => $request->numero_remito,
                 'fecha_remito' => $request->fecha_remito,
+                'observaciones' => $request->observaciones,
+                'cai' => $cliente->cai,
+                'cai_vencimiento' => $cliente->$cai_vencimiento,
                 'customer_id' => $request->customer['id'],
                 'transporte' => $request->transportista['transporte'],
                 'conductor' => $request->transportista['conductor'],
@@ -51,6 +58,10 @@ class RemitoController extends Controller
                     'cantidad' => $item['cantidad'],
                     'product_id' => $item['product_id'],
                     'remito_id' => $remito->id,
+                    'ean13' => $item['ean13'],
+                    'fecha_vencimiento' => ($item['fecha_vencimiento'])?Carbon::createFromFormat('d/m/Y', $item['fecha_vencimiento']):null,
+                    'unidad_medida'=> $item['unidad_medida'],
+                    'lote' => $item['lote'],
                     'disabled' => 0,
                     'audit_created_by' => Auth::user()->email,
                     'client_id' => $remito->client_id
@@ -92,10 +103,12 @@ class RemitoController extends Controller
        $remito = Remito::where('id', $request->id)
                 ->with('customer', 'articulos', 'client')->first();
         $data = $remito;
+
+       
         //return $remito;
         $pdf = PDF::loadView('templates.remito.orien', compact('data'));
         return $pdf->stream('remito.pdf');
-        return view('templates.remito.orien', compact('data'));
+        //return view('templates.remito.orien', compact('data'));
 
        // Se deja de utilizar para utilizar el DOMPF
        //return $this->RemitoPrintManager($request, $remito);
