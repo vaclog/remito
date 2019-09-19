@@ -391,7 +391,7 @@ trait ExcelTrait
 
         
         $writer = new \PhpOffice\PhpSpreadsheet\Writer\Csv($sp);
-        $writer->setDelimiter(';');
+        $writer->setDelimiter(',');
         $writer->setEnclosure('');
         $writer->setLineEnding("\r\n");
         $writer->setSheetIndex(0);
