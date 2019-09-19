@@ -42,21 +42,21 @@
             {!! Form::text('razon_social', null, array('placeholder' => 'Nombre de la empresa','class' => 'form-control')) !!}
         </div>
 
-        <div class="form-group">
+        <div class="form-group col-4">
             <strong>Sucursal:</strong>
             {!! Form::text('sucursal', null, array('placeholder' => 'Sucursal','class' => 'form-control')) !!}
         </div>
-        <div class="form-group">
+        <div class="form-group col-4">
             <strong>Numero CAI:</strong>
             {!! Form::text('cai', null, array('placeholder' => 'Numero CAI','class' => 'form-control')) !!}
         </div>
-        <div class="form-group">
+        <div class="form-group col-4">
                 <label for="cai_vencimiento"><strong> Vencimiento CAI</strong></label>
 
             <div class="input-group date">
                 <input type="text" id="cai_vencimiento" name="cai_vencimiento" class="form-control">
                 <span class="input-group-addon">
-                    <i class="glyphicon glyphicon-calendar"></i></span>
+                    <i class="material-icons">calendar_today</i></span>
             </div>
             
         </div>
