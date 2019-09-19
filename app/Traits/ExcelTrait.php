@@ -380,7 +380,7 @@ trait ExcelTrait
                             date_format(date_create($remito->fecha_remito), 'Ymd'),
                             'EMP00', 'FC|OEP',
                             $remito->referencia,
-                            $remito->customer->codigo_valkimia,
+                            $remito->customer->codigo,
                             '1',
                             $art->codigo,
                             $art->cantidad];
