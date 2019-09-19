@@ -39,7 +39,13 @@
                     <div class="col-xs-4 col-sm-4 col-md-4">
                         <div class="form-group">
                             <strong>Codigo:</strong>
-                            {!! Form::text('codigo', null, array('placeholder' => 'Codigo','class' => 'form-control')) !!}
+                            {!! Form::text('codigo', null, array('placeholder' => 'Codigo del Cliente (Ej: Codigo de Orien)','class' => 'form-control')) !!}
+                        </div>
+                    </div>
+                    <div class="col-xs-4 col-sm-4 col-md-4">
+                        <div class="form-group">
+                            <strong>Codigo VALKIMIA:</strong>
+                            {!! Form::text('codigo_valkimia', null, array('placeholder' => 'Codigo VALKIMIA','class' => 'form-control')) !!}
                         </div>
                     </div>
         

@@ -40,10 +40,7 @@
                         
                         
                         </div>
-                        <div class="panel-footer text-right">
-                            
-                            <button class="btn btn-primary nextBtn pull-right btn-lg" type="button">Next</button>
-                        </div>
+                        
                     
                     </div>
 
@@ -56,10 +53,7 @@
                             <select-client></select-client>
                             
                         </div>
-                        <div class="panel-footer text-right">
-                            <button class="btn btn-primary nextBtn pull-right btn-lg" type="button">Next</button>
-                        </div>
-                        {{--  <button class="btn btn-primary nextBtn pull-right" type="button">Next</button>  --}}
+                        
                     </div>
                     
                     <div class="panel panel-primary setup-content" id="step-3">
@@ -70,9 +64,7 @@
                             
                                 <transport-data></transport-data>
                         </div>
-                        <div class="panel-footer text-right">
-                            <button class="btn btn-primary nextBtn pull-right btn-lg" type="button">Next</button>
-                        </div>
+                       
                     </div>
                     
                 

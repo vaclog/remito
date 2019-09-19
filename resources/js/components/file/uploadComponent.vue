@@ -5,16 +5,30 @@
         <div class="form-group">
             <label for="name">Archivo:</label>
             
-                <v-file-input label="File input" @change="change" accept=".xlsx, .xls" required></v-file-input>
+            <v-file-input label="File input" @change="change" accept=".csv" required></v-file-input>
 
         </div>
+        <v-spacer></v-spacer>
+        <div class="form-group">
+            <label for="name">Nro Armado:</label>
+            <input type="number" 
+            v-model="armado" 
+            required
+            class="form-control display-1"
+            />
+            <small id="emailHelp" class="form-text text-muted">Ingrese el numero de Armado de VALKIMIA</small>
+
+        </div>
+        
+        <v-spacer></v-spacer>
+
         <div class="form-group text-right">
         
             <!-- <input class="btn btn-secondary" type="submit"  value="Upload"> -->
-            <v-spacer></v-spacer>
-        <v-btn block color="primary" @click="submit" :loading="loading">Procesar</v-btn>
+            
+            <v-btn block color="primary" @click="submit" :loading="loading">Procesar</v-btn>
         </div>
-
+        <v-spacer></v-spacer>
         <ul v-if="problema">
 
             <li class="red lighten-1 white--text text--darken-2 caption" v-for="error of errors" :key="error.id">
@@ -22,8 +36,7 @@
             </li>
         </ul>
         <div class="form-group">
-
-            
+        
                 <v-text-field 
                     class="display-1 text-center"
                     v-model="remito"
@@ -70,6 +83,7 @@ var today = moment().format('YYYY-MM-DD')
                 fecha: today ,
                 loading: false,
                 archivo: null,
+                armado: 0,
                 errors: {'message': 'Hola'},
                 items: [],
                 remito: 0,
@@ -81,25 +95,22 @@ var today = moment().format('YYYY-MM-DD')
         methods: {
 
             remitoChange(remito){
-                console.log(remito)
                 this.setNumeroRemito(remito)
             },
             ...mapMutations(
                 [
-                    'setArticulos', 'setNumeroRemito', 'setFechaRemito'
+                    'setArticulos', 'setNumeroRemito', 'setFechaRemito', 'setCustomer', 
+                    'setPedido',
                 ]
             ),
 
             changeFechaRemito(fecha){
-                console.log(fecha.target.value)
                 var d = moment(fecha.target.value)
-                console.log(d.isValid())
                 if (d.isValid()){
                     this.setFechaRemito(fecha.target.value)
                 }
             },
             change(file){
-                console.log(file)
                 this.archivo = file;
                 
             },
@@ -111,11 +122,12 @@ var today = moment().format('YYYY-MM-DD')
                     console.log(this)
                 }, 5)
 
-                console.log(this.$store.state.idcliente);
                 this.problema = false;
                 let formData = new FormData();
                 formData.append('archivo', this.archivo);
                 formData.append('client_id', this.$store.state.idcliente);
+                formData.append('armado', this.armado);
+
 
                 axios.post('/upload',
                     formData,
@@ -130,6 +142,8 @@ var today = moment().format('YYYY-MM-DD')
                             this.remito = response.data.numero_remito
                             this.setNumeroRemito(response.data.numero_remito)
                             this.setArticulos(response.data.articulos)
+                            this.setCustomer(response.data.customer)
+                            this.setPedido(response.data.pedido)
                             this.loading = false;
                             })
                     
@@ -149,9 +163,9 @@ var today = moment().format('YYYY-MM-DD')
         mounted() {
             this.setFechaRemito(this.fecha)
             
-            console.log('Upload Component mounted.')
         },
         computed:
-            mapState(['count', 'articulos', 'fecha_remito', 'numero_remito', 'idcliente']),
+            mapState(['count', 'articulos', 'fecha_remito', 'numero_remito', 'idcliente' ,'customer',
+                     'pedido']),
     }
 </script>

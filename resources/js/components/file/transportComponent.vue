@@ -37,7 +37,19 @@
 
             <div class="form-group">
                 <v-text-field
+                    :value="pedido"
+                    
+                   
+                    
+                    label="Nro Pedido"
+                    
+                   :disabled="true"
+                ></v-text-field>
+            </div>
+            <div class="form-group">
+                <v-text-field
                     v-model="remito.observaciones"
+                   
                     
                     label="Observaciones"
                     
@@ -48,7 +60,10 @@
     
         <!-- <input class="btn btn-secondary" type="submit"  value="Upload"> -->
              <v-spacer></v-spacer>
-            <v-btn block color="primary" @click="submit" :loading="loading">Generar Remito</v-btn>
+            <v-btn block color="primary" @click="submit" 
+            :disabled="submitted"
+            :loading="loading">{{button_label}}</v-btn>
+           
             </div>
 
                 <v-snackbar
@@ -165,6 +180,7 @@
 import { mapState } from 'vuex'
 import { mapMutations } from 'vuex'
 
+
   export default {
     props: {
         edit: false,
@@ -172,12 +188,16 @@ import { mapMutations } from 'vuex'
     },
 
     data: () => ({
+        
+        button_label: 'Generar Remito',
         editing: false,
         snackbar: false,
         remito: {
             numero_remito: '',
             fecha_remito: '',
             observaciones: '',
+            referencia: '',
+
             client_id: '',
             customer: {},
             articulos: {},
@@ -195,6 +215,7 @@ import { mapMutations } from 'vuex'
         multiple: false,
         disabled: false,
         readonly: false,
+        submitted: false,
         focusable: false,
         selectedcustomer: [],
         
@@ -214,28 +235,23 @@ import { mapMutations } from 'vuex'
                 ],
     }),
 
-     ...mapMutations(
-                [
-                    'setArticulos', 'setNumeroRemito', 'getRemito'
-                ]
-            ),
+     
 
     methods:{
+        volver(){
+            this.$router.back();
+        },
+        
+        ...mapMutations(
+            [
+                'setArticulos', 'setNumeroRemito', 'setFechaRemito', 'setCustomer', 
+                'setPedido',
+            ]
+        ),
 
-        // getRemito(id) {
-        //     axios.get('/api/remito?id=' +id)
-        //             .then((response) => {
-        //                 //this.remito = response.data;
-        //                 console.log(response.data)
-        //                 this.items = response.data.articulos;
-        //                 console.log(response.data.articulos)
-        //             }).catch((e) => {
-        //                 console.log(e)
-        //             }).then((data) => {
-        //                 //console.log(this.items)
-        //                 //this.setArticulos(this.items)
-        //             });
-        //     },
+        
+
+        
         
         submit(e){
                 this.loading = true
@@ -244,10 +260,11 @@ import { mapMutations } from 'vuex'
                     console.log(this)
                 }, 5)
                 this.remito.customer = this.customer
+                this.remito.referencia = this.$store.state.pedido
+                
                 this.remito.articulos = this.articulos
                 this.remito.numero_remito = this.$store.state.numero_remito
                 this.remito.fecha_remito = this.$store.state.fecha_remito
-                console.log(this.$store.state.fecha_remito)
                 this.remito.client_id = this.$store.state.idcliente
                 var RemitoData = this.remito;
                 
@@ -257,8 +274,9 @@ import { mapMutations } from 'vuex'
                     )
                     .then(response => {
                             // JSON responses are automatically parsed.
-                           console.log(response.data);
                             this.loading = false;
+                            this.submitted = true;
+                            this.button_label = 'Remito YA GENERADO';
                             this.snackbar = true;
                             })
                     
@@ -276,36 +294,30 @@ import { mapMutations } from 'vuex'
     },
 
     created(){
-        console.log('creado')
     },
 
 
     mounted() {
         
-        if (this.edit){
-            console.log(' mounted')
-            console.log(this.items)
-           // this.setArticulos(this.items)
-        }
+        
             
     },
 
     beforeMount(){
-        if (this.edit){
-            console.log(' Before mount')
-           // this.getRemito(this.id)
-         
-        }
+       
+       
         
     },
     
     
     computed:
-        mapState(['count', 'articulos', 'customer', 'numero_remito', 'fecha_remito']),
+        mapState(['count', 'articulos', 'customer', 'numero_remito', 'fecha_remito', 'pedido']),
         setItems(){
             this.setArticulos(this.items)
-        }
-
+        },
+        
+        
+      
   }
 
   

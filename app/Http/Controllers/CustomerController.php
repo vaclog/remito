@@ -68,6 +68,7 @@ class CustomerController extends Controller
 
         $this->validate($request, [
             'codigo'    => 'required|unique:customers,codigo',
+            'codigo_valkimia'    => 'required|unique:customers,codigo_valkimia',
             'nombre'    => 'required',
             'cuit'      => 'required',
             'calle'     => 'required',
@@ -81,6 +82,7 @@ class CustomerController extends Controller
 
         $customer = new Customer([
             'codigo'    => $request->get('codigo'),
+            'codigo_valkimia'    => $request->get('codigo_valkimia'),
             'nombre'    => $request->get('nombre'),
             'cuit'      => $request->get('cuit'),
             'client_id' => $request->get('client_id'),
@@ -143,9 +145,8 @@ class CustomerController extends Controller
     {
 
 
-
          $this->validate($request, [
-            'codigo'    => 'required|unique:customers,codigo',
+             'codigo_valkimia' => 'required',
             'nombre'    => 'required',
             'cuit'      => 'required',
             'calle'     => 'required',
@@ -155,9 +156,19 @@ class CustomerController extends Controller
             'client_id' => 'required'
         ]);
 
+        $existeCodigoValkimia = Customer::where('id', '<>', $id)
+                                ->where('codigo_valkimia', $request->codigo_valkimia)->first();
+        if($existeCodigoValkimia){
+            $this->validate($request, [
+                'codigo_valkimia'    => 'required|unique:customers,codigo_valkimia',
+                ]);
+        }
+        
         $customer = Customer::find($id);
         //$client->update($request->all());
         $customer->codigo = $request->codigo;
+        $customer->codigo_valkimia = $request->codigo_valkimia;
+
         $customer->nombre = $request->nombre;
         $customer->cuit = $request->cuit;
         $customer->calle = $request->calle;
