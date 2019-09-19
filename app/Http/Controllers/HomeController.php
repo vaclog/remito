@@ -41,6 +41,7 @@ class HomeController extends Controller
 
         $remitos = Remito::where('disabled', 0)
                     ->where('client_id', $client_selected)
+                    ->orderBy('created_at', 'desc')
                     ->with('customer');
 
         $remitos = $remitos->paginate(20);

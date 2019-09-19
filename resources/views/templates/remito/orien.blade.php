@@ -15,9 +15,17 @@
             .pagenum:before {
                 content: counter(page);
             }
+
+            /*.etiqueta_copia:before {
+                content: 'Original';
+            }*/
+
+            
+
+           
             
             body {
-                margin-top: 6.5cm;
+                margin-top: 7cm;
                 margin-left: 0.5cm;
                 margin-right: 0.5cm;
                 margin-bottom: 3.5cm;
@@ -35,7 +43,7 @@
                 top: 0.5cm;
                 left: 0.5cm;
                 right: 0.5cm;
-                height: 5cm;
+                height: 5.5cm;
                 /** Extra personal styles **/
                 /*background-color: #03a9f4;
                     color: white;
@@ -83,6 +91,12 @@
                 font-size: 40px;
                 vertical-align: middle;
                 text-align: center;
+            }
+
+            .original-duplicado {
+                text-align: right;
+                font-size: 12px;
+                
             }
             
             .company {
@@ -239,7 +253,7 @@
                             {{ (strtotime($data->fecha_remito)> 0)?date_format(date_create($data->fecha_remito), 'd/m/Y'):'-'    }}
                     </th>
                     <th style="width: 12%" class="barras">
-                        <br> Original
+                        <br> <p class="etiqueta_copia"></p> 
                     </th>
                 </tr>
                 <tr>
@@ -254,7 +268,7 @@
                             INICIO DE ACTIVIDAD: 01/11/1996
                         </p>
                     </td>
-                    <td class="pagina">Pagina <span class="pagenum"></span></td>
+                    <td class="pagina"> <span lass="pagenum"></span></td>
 
                 </tr>
 
@@ -311,6 +325,10 @@
                 <td class="observaciones-texto" style="width:90%;">{{ $data->observaciones }}</td>
 
             </tr>
+            <tr>
+                <td valign="top">Nro Pedido: </td>
+                <td class="">{{$data->referencia}}</td>
+            </tr>
         </table>
     </header>
 
@@ -345,7 +363,8 @@
     </footer>
 
     <main>
-        <table class="articulos">
+       
+        <table class="articulos" id="tabla1" name="tabla1">
 
             <thead class="item-head">
                 <tr>
@@ -392,14 +411,80 @@
             </tbody>
             <tfoot class="footer">
                 <tr>
-                    <td colspan="2">TOTAL de LINEAS</td>
+                    <td colspan="2" tipo_etiqueta="tabla1" class="etiqueta_copia">TOTAL de LINEAS</td>
                     <td colspan="2">{{ count($data['articulos'])  }}</td>
                     <td colspan="3" class="cantidad">{{$data->articulos->sum('cantidad')}}</td>
                 </tr>
+                <tr>
+                    <td colspan="7" class="original-duplicado"> <span class="original-duplicado"> ORIGINAL</span></td>
+                </tr>
             </tfoot>
         </table>
+        <p style="page-break-after: always;">     
+        </p>
+        
+
+        <table class="articulos" id="tabla2" name="tabla2" style="counter-reset: page;">
+
+            <thead class="item-head">
+                <tr>
+                    <td style="width: 10%">
+                        SKU
+                    </td>
+                    <td style="width: 35%">
+                        Articulo
+                    </td>
+                    <td style="width: 15%">
+                        Ean13
+                    </td>
+                    <td style="width: 10%">
+                        Lote
+                    </td>
+                    <td style="width: 10%">
+                        Vencimiento
+                    </td>
+                    <td style="width: 10%">
+                        UM
+                    </td>
+                    <td style="width: 10%">
+                        Cantidad
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+                
+                @foreach ($data['articulos'] as $item)
+                <tr>
+                    <td>{{$item['codigo']}}</td>
+                    <td>{{$item['descripcion']}}</td>
+                    <td>{{$item['ean13']}}</td>
+                    <td>{{$item['lote']}}</td>
+                    <td>{{
+                            (strtotime($item['fecha_vencimiento'])> 0)?date_format(date_create($item['fecha_vencimiento']), 'd/m/Y'):'-'    
+                    }}</td>
+                    <td>{{ $item['unidad_medida']}}</td>
+                    <td class="cantidad">{{$item['cantidad']}}</td>
+                </tr>
+
+                @endforeach
+
+            </tbody>
+            <tfoot class="footer">
+                <tr>
+                    <td colspan="2" class="etiqueta_copia">TOTAL de LINEAS</td>
+                    <td colspan="2">{{ count($data['articulos'])  }}</td>
+                    <td colspan="3" class="cantidad">{{$data->articulos->sum('cantidad')}}</td>
+                </tr>
+                <tr>
+                    <td colspan="7" class="original-duplicado"> <span class="original-duplicado"> DUPLICADO</span></td>
+                </tr>
+            </tfoot>
+        </table>
+
     </main>
 
+
+    
 </body>
 
 </html>

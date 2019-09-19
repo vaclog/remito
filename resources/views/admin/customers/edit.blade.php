@@ -34,12 +34,20 @@
                 @endif
 
 
-                {!! Form::model($customers, ['method' => 'PATCH','route' => ['customers.update', $customer->id]]) !!}
+                {!! Form::model($customer, ['method' => 'PATCH','route' => ['customers.update', $customer->id]]) !!}
                 <div class="row">
                     <div class="col-xs-4 col-sm-4 col-md-4">
                         <div class="form-group">
                             <strong>Codigo:</strong>
-                            {!! Form::text('codigo', null, array('placeholder' => 'Codigo','class' => 'form-control')) !!}
+                            {!! Form::text('codigo', null, array('placeholder' => 'Codigo no se puede editar','class' => 'form-control' , 'readonly')) !!}
+                            <small class="text-warning">Para cambiar del codigo debe desactivar este registro y crear uno nuevo con otro codigo</small>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-4 col-sm-4 col-md-4">
+                        <div class="form-group">
+                            <strong>Codigo VALKIMIA:</strong>
+                            {!! Form::text('codigo_valkimia', null, array('placeholder' => 'Codigo VALKIMIA','class' => 'form-control')) !!}
                         </div>
                     </div>
             
@@ -75,7 +83,7 @@
                         </div>
                     </div>
         
-                    <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="col-xs-4 col-sm-4 col-md-4">
                         <div class="form-group">
                             <strong>Client:</strong>
                             {!! Form::select('client_id', $clients, $customer->client_id, array('value' => $customer->client_id, 'placeholder' => 'Clients', 'class' => 'form-control m-select2')) !!}

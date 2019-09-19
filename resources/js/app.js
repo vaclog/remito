@@ -36,50 +36,29 @@ Vue.use(VueAxios, axios);
 
 
 
-import ClientIndex from './components/client/ClientIndex.vue';
-import ClientCreate from './components/client/ClientCreate.vue';
-import ClientEdit from './components/client/ClientEdit.vue';
-import ClientHome from './components/client/ClientHome.vue'
+
 
 import About from './components/about.vue'
 
 import vuetify from './plugins/vuetify';
 Vue.use(vuetify)
 
-import home from './components/homeComponent.vue';
+import create from './components/homeComponent.vue';
 Vue.component('home', require('./components/homeComponent.vue').default);
 
 const routes = [
 
-    // {
-    //     name: 'home',
-    //     path: '/',
-    //     component: ClientHome
-    // },
-    {
-        name: 'create',
-        path: '/create',
-        component: ClientCreate
-    },
-    {
-        name: 'clients',
-        path: '/clients',
-        component: ClientIndex
-    },
-    {
-        name: 'edit',
-        path: '/edit/:id',
-        component: ClientEdit
-    },
+
+
     {
         name: 'about',
         path: '/about',
         component: About
     },
     {
-        name: 'home',
+        name: 'create',
         path: '/remitos/create',
-        component: home
+        component: create
     }
 ];
 
@@ -131,6 +110,7 @@ const store = new Vuex.Store({
         numero_remito: 0,
         fecha_remito: null,
         idcliente: null,
+        pedido: null,
 
     },
     mutations: {
@@ -152,7 +132,12 @@ const store = new Vuex.Store({
         },
         setFechaRemito(state, fecha) {
             state.fecha_remito = fecha;
+        },
+        setPedido(state, pedido) {
+            state.pedido = pedido;
         }
+
+
 
     }
 })

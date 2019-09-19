@@ -28,9 +28,15 @@ trait ExcelTrait
 {
     protected function read(Request $request){
 
+        //
+        /* Se cambio por CSV despues de la implementacion de Orien
         $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader("Xlsx");
+        */
+
+        $reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
 
         $client_id = $request->input('client_id');
+        $armado = $request->input('armado');
         $path= $request->file('archivo')->getRealPath();
         $ws = $reader->load($path)->getActiveSheet();
 
@@ -38,21 +44,23 @@ trait ExcelTrait
         //dd($ws->getRowDimensions());
 
         $highestRow = $ws->getRowDimensions(); // e.g. 10
-        $highestColumn = $ws->getColumnDimensions(); // e.g 'F'
+        $highestColumn = ['S']; // e.g 'F'
 
-        if(sizeof($highestRow) <= 1)
+        if(sizeof($highestRow) <= 1){
             $lastRowIndex = 1000;
-
-
-        else
-        $lastRowIndex = sizeof($highestRow);
+        }
+        else{
+            $lastRowIndex = sizeof($highestRow);
+        }
+            
+        
         //$sp->setActiveSheetIndex(0);
-        $lastColumnString = Coordinate::stringFromColumnIndex(sizeof($highestColumn));
+        $lastColumnString = 'S';//Coordinate::stringFromColumnIndex(sizeof($highestColumn));
         
 
         
         $dataArray = $ws->rangeToArray(
-        'A2:'.$lastColumnString.$lastRowIndex,     // The worksheet range that we want to retrieve
+        'A3:'.$lastColumnString.$lastRowIndex,     // The worksheet range that we want to retrieve
         NULL,        // Value that should be returned for empty cells
         TRUE,        // Should formulas be calculated (the equivalent of getCalculatedValue() for each cell)
         TRUE,        // Should values be formatted (the equivalent of getFormattedValue() for each cell)
@@ -60,16 +68,20 @@ trait ExcelTrait
         );
         //dd($highestColumn->getColumnIndex());
 
-        $last = Arr::last($highestColumn, null, null);
+        //$last = Arr::last($highestColumn, null, null);
         /*
         * Se eliminan los nulos
         */
         $filtered = Arr::where($dataArray, function ($value, $key) {
             
-            return !is_null($value['A']);
+            return !is_null($value['F']);
+        });
+
+        $filtered_by_Armado = Arr::where($filtered, function ($value, $key) use ($request){
+            return ($value['A'] == $request->input('armado'));
         });
        
-        return $filtered;
+        return $filtered_by_Armado;
 
     }
 
@@ -295,20 +307,38 @@ trait ExcelTrait
    
 }
 
-public function setHeaderXlsx($filename){
-    // Redirect output to a client’s web browser (Xlsx)
-    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    header('Content-Disposition: attachment;filename="'.$filename.'"');
-    header('Cache-Control: max-age=0');
-    // If you're serving to IE 9, then the following may be needed
-    header('Cache-Control: max-age=1');
+    public function setHeaderXlsx($filename){
+        // Redirect output to a client’s web browser (Xlsx)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="'.$filename.'"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
 
-    // If you're serving to IE over SSL, then the following may be needed
-    header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
-    header('Last-Modified: ' . gmdate('D, d M Y') . ' GMT'); // always modified
-    header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
-    header('Pragma: public'); // HTTP/1.0
-}
+        // If you're serving to IE over SSL, then the following may be needed
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header('Last-Modified: ' . gmdate('D, d M Y') . ' GMT'); // always modified
+        header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header('Pragma: public'); // HTTP/1.0
+    }
+    public function setHeaderCsv($filename){
+        // Redirect output to a client’s web browser (Xlsx)
+        //header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        //header('Content-Type: application/csv');
+        //header('Content-Type: text/csv');
+        
+        header('Content-Type: application/vnd.msexcel');
+        header('Content-Disposition: attachment;filename="'.$filename.'"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header('Last-Modified: ' . gmdate('D, d M Y') . ' GMT'); // always modified
+        header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header('Pragma: public'); // HTTP/1.0
+    }
 
 
     public function setHeader($filename){
@@ -329,6 +359,55 @@ public function setHeaderXlsx($filename){
         header('Last-Modified: ' . gmdate('D, d M Y') . ' GMT'); // always modified
         header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
         header('Pragma: public'); // HTTP/1.0
+    }
+
+    
+
+
+    public function toExcelOrien($remito){
+        $sp = new Spreadsheet();
+
+        $numero_remito = str_pad( $remito->sucursal, 4, "0", STR_PAD_LEFT).'-'.str_pad( $remito->numero_remito, 8, "0", STR_PAD_LEFT);
+        $sp->getProperties()
+           ->setCreator('VACLOG WD')
+           ->setTitle('RT-ORIEN-'.$numero_remito);
+        
+        $sp->setActiveSheetIndex(0);
+        $i = 1;
+        foreach ($remito->articulos as $key => $art) {
+            # code...
+            $registro = [  $numero_remito, 
+                            date_format(date_create($remito->fecha_remito), 'Ymd'),
+                            'EMP00', 'FC|OEP',
+                            $remito->referencia,
+                            $remito->customer->codigo_valkimia,
+                            '1',
+                            $art->codigo,
+                            $art->cantidad];
+            $sp->getActiveSheet()->fromArray($registro ,null, 'A'.$i);
+            $i++;
+        }
+        
+
+        
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Csv($sp);
+        $writer->setDelimiter(';');
+        $writer->setEnclosure('');
+        $writer->setLineEnding("\r\n");
+        $writer->setSheetIndex(0);
+        $archivo = 'RT-ORIEN-'.$numero_remito.'.csv';
+        //$this->setHeaderCsv($archivo);
+        //$writer->save('php://output');
+
+        
+        return response((string) $writer->save('php://output'), 200, [
+            'Content-Type' => 'text/csv',
+            'Content-Transfer-Encoding' => 'binary',
+            'Content-Disposition' => 'attachment; filename="'.$archivo.'"',
+        ]);
+
+//        $writer->save($archivo);
+       
     }
 
     public function test1($remito){

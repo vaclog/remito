@@ -6,8 +6,9 @@
             <label class="control-label">Company Name</label>
             
             <v-select v-model="selectedCustomer"
-                    :options="items" label="nombre">
-                
+                    :options="items" label="nombre"
+                    
+                    >
             </v-select>
         </div>
         <div>
@@ -100,6 +101,10 @@ export default {
     },
 
     mounted(){
+        console.log('component mounted')
+        console.log(this.$store.state.customer )
+        // this.selectedCustomer = this.$store.state.customer
+      
         
     },
     methods:{

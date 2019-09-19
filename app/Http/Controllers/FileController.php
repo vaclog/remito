@@ -9,6 +9,7 @@ use App\Http\Requests\UploadRequest;
 use App\File;
 use App\Product;
 use App\Remito;
+use App\Customer;
 
 use App\Traits\ExcelTrait;
 use Carbon\Carbon;
@@ -40,37 +41,60 @@ class FileController extends Controller
             return response()->json( [
                 "error"=> [
                   "message"=> "No se selecciono el archivo",
-                  "type"=> "OAuthException",
+                  "type"=> "Debe indicar un arhivo ",
                   "code"=> 500,
                   "error_subcode"=> 463,
-                  "fbtrace_id"=> "H2il2t5bn4e"
+                  "fbtrace_id"=> "error grave"
                 ]
                 ], 500);
         }
+        if ($request->input('armado') == '' || !$request->input('armado') ){
+            return response()->json( [
+                "error"=> [
+                  "message"=> "Debe indicar el numero de Armado de VALMIMIA",
+                  "type"=> "Error grave",
+                  "code"=> 500,
+                  "error_subcode"=> 463,
+                  "fbtrace_id"=> "error grave"
+                ]
+                ], 500);
+        }
+
         $client_id = $request->input('client_id');
        
         $excel = collect($this->read($request));
         /*
         * Creo una nueva collection con el articulo y la cantidad
         */
-        $map = $excel->map(function($items, $i){
+        $customer_codigo_valkimia = null;
+        $pedido = null;
+        $map = $excel->map(function($items, $i) use (&$customer_codigo_valkimia, &$pedido) {
             
-                $data['codigo'] = $items['A']; // Articulo
-                $data['cantidad'] = $items['G'];   // Pickeada
+                $data['codigo'] = $items['F']; // Articulo
+                $data['cantidad'] = $items['J'];   // Pickeada
+                $data['descripcion'] = $items['H'];   // Pickeada
+                $data['marca'] = 'no definida';
+                $data['cliente_entidad_id'] = $items['C'];
+                $customer_codigo_valkimia = $items['C'];
+                $pedido = $items['E'];
+                $data['cliente_nombre'] = $items['D'];
+                $data['fecha_vencimiento'] = '';
+                $data['lote'] = '';
+                $data['product_id'] = null;
+                $data['ean13'] = null;
+                $data['unidad_medida'] = 'UN';
 
-                
-                $fecha_DD_MM_YYYY = date_format(Carbon::createFromFormat('m/d/Y', $items['I']), 'd/m/Y');
-                $data['fecha_vencimiento'] = $fecha_DD_MM_YYYY; // 'DD/MM/YYYY'
-
-                $data['lote'] = $items['J'];
+                //$fecha_DD_MM_YYYY = date_format(Carbon::createFromFormat('m/d/Y', $items['I']), 'd/m/Y');
+                //$data['fecha_vencimiento'] = $fecha_DD_MM_YYYY; // 'DD/MM/YYYY'
+                //$data['lote'] = $items['J'];
 
                 return $data;
             
          });
 
-         $map = $map->sortBy('codigo');
+        // $map = $map->sortBy('codigo');
 
-         $wherein = $map->map(function($items, $i){
+         /*$wherein = $map->map(function($items, $i){
              $data[$i] = $items['codigo'];
              return $data;
          });
@@ -80,15 +104,20 @@ class FileController extends Controller
                     ->orderBy('codigo')
                     ->where('client_id', $client_id)
                     ->get();
-
+        
 
         $matchs = $this->MatchProducts($map, $product);
 
-
+          */
         
+        $customer = Customer::where('codigo_valkimia', $customer_codigo_valkimia)->first();
         
         $respuesta['numero_remito'] = $this->getNextRemito($client_id);
-        $respuesta['articulos'] = $matchs;
+        //$respuesta['articulos'] = $matchs;
+        $respuesta['pedido'] = $pedido;
+
+        $respuesta['articulos'] = $map;
+        $respuesta['customer'] = $customer;
         return response()->json($respuesta);
         
         

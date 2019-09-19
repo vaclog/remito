@@ -33,6 +33,8 @@ class RemitoController extends Controller
                 'numero_remito' => $request->numero_remito,
                 'fecha_remito' => $request->fecha_remito,
                 'observaciones' => $request->observaciones,
+                'referencia' => $request->referencia,
+
                 'cai' => $cliente->cai,
                 'cai_vencimiento' => $cliente->cai_vencimiento,
                 'customer_id' => $request->customer['id'],
@@ -105,7 +107,7 @@ class RemitoController extends Controller
 
        
         $pdf = PDF::loadView('templates.remito.orien', compact('data'));
-        return $pdf->stream('remito.pdf');
+        return $pdf->download('remito.pdf');
         //return view('templates.remito.orien', compact('data'));
 
        // Se deja de utilizar para utilizar el DOMPF
@@ -115,11 +117,12 @@ class RemitoController extends Controller
        
     }
 
-    public function print2 (Request $request){
+    public function excel(Request $request){
+        $remito = Remito::where('id', $request->id)
+                ->with('customer', 'articulos', 'client')->first();
+        $data = $remito;
         
-        $mpdf = new Mpdf();
-        $mpdf->WriteHTML('<div class="row"><div class="col-6"><h1 class="text-center">Hello world! </h1></div><div class="col-6"><h1 class="text-center">Hello world! 22 </h1></div></div>');
-        
-        $mpdf->Output();
+        return $this->toExcelOrien($data);
+
     }
 }

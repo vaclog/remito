@@ -42,7 +42,9 @@
         <table class="table table-bordered">
         <tr>
             
-            <th>Codigo</th>
+            <th>Codigo ERP</th>
+            <th>Codigo VALKIMIA</th>
+
             <th>Nombre</th>
             <th>CUIT</th>
             <th>Calle</th>
@@ -57,6 +59,8 @@
             <tr>
                 
                 <td>{{ $customer->codigo }}</td>
+                <td>{{ $customer->codigo_valkimia }}</td>
+
                 <td>{{ $customer->nombre }}</td>
                 <td>{{ $customer->cuit }}</td>
                 <td>{{ $customer->calle }}</td>
