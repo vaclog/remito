@@ -22,6 +22,7 @@ use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\IWriter;
 use PhpOffice\PhpSpreadsheet\Style\Color;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 
 trait ExcelTrait
@@ -400,7 +401,7 @@ trait ExcelTrait
 
         
         $writer = new \PhpOffice\PhpSpreadsheet\Writer\Csv($sp);
-        $writer->setDelimiter(',');
+        $writer->setDelimiter(';');
         $writer->setEnclosure('');
         $writer->setLineEnding("\r\n");
         $writer->setSheetIndex(0);
@@ -409,12 +410,27 @@ trait ExcelTrait
         //$writer->save('php://output');
 
         
-        return response((string) $writer->save('php://output'), 200, [
-            'Content-Type' => 'text/csv',
-            'Content-Transfer-Encoding' => 'binary',
-            'Content-Disposition' => 'attachment; filename="'.$archivo.'"',
-        ]);
+        // return response((string) $writer->save('php://output'), 200, [
+        //     'Content-Type' => 'text/csv',
+        //     'Content-Transfer-Encoding' => 'binary',
+        //     'Content-Disposition' => 'attachment; filename="'.$archivo.'"',
+        // ]);
 
+
+        $response =  new StreamedResponse(
+            function () use ($writer) {
+                $writer->save('php://output');
+            }
+        );
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Disposition', 'attachment;filename="'.$archivo.'"');
+        $response->headers->set('Cache-Control','max-age=0');
+        return $response;
+       
+
+        
+
+        
 //        $writer->save($archivo);
        
     }
