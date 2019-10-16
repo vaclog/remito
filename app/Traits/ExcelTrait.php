@@ -389,7 +389,7 @@ trait ExcelTrait
             $registro = [  $numero_remito, 
                             date_format(date_create($remito->fecha_remito), 'Ymd'),
                             'EMP00', 'FC|OEP',
-                            $remito->referencia,
+                            $art->referencia,
                             $remito->customer->codigo,
                             '1',
                             $art->codigo,

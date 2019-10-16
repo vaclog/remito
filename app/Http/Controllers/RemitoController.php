@@ -25,6 +25,8 @@ class RemitoController extends Controller
 
     public function store(Request $request){
         $remito = null;
+        set_time_limit(0);
+
 
         $cliente = Client::find($request->client_id);
         DB::transaction(function() use ($request, &$remito, $cliente) {
@@ -63,6 +65,7 @@ class RemitoController extends Controller
                     'fecha_vencimiento' => ($item['fecha_vencimiento'])?Carbon::createFromFormat('d/m/Y', $item['fecha_vencimiento']):null,
                     'unidad_medida'=> $item['unidad_medida'],
                     'lote' => $item['lote'],
+                    'referencia' => strval($item['pedido']),
                     'disabled' => 0,
                     'audit_created_by' => Auth::user()->email,
                     'client_id' => $remito->client_id

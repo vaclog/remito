@@ -67,7 +67,7 @@ class FileController extends Controller
         * Creo una nueva collection con el articulo y la cantidad
         */
         $customer_codigo_valkimia = null;
-        $pedido = null;
+        $pedido = '';
         $map = $excel->map(function($items, $i) use (&$customer_codigo_valkimia, &$pedido) {
             
                 $data['codigo'] = $items['F']; // Articulo
@@ -76,7 +76,14 @@ class FileController extends Controller
                 $data['marca'] = 'no definida';
                 $data['cliente_entidad_id'] = $items['C'];
                 $customer_codigo_valkimia = $items['C'];
-                $pedido = $items['E'];
+                
+                if ( strpos($pedido, strval($items['E'])) !== false)
+                        {}
+                else{
+                    $pedido = $pedido.((strlen($pedido) == 0)?$items['E']:', '.$items['E']);
+                }
+                
+                $data['pedido'] = $items['E'];
                 $data['cliente_nombre'] = $items['D'];
                 $data['fecha_vencimiento'] = '';
                 $data['lote'] = '';
@@ -84,36 +91,18 @@ class FileController extends Controller
                 $data['ean13'] = null;
                 $data['unidad_medida'] = 'UN';
 
-                //$fecha_DD_MM_YYYY = date_format(Carbon::createFromFormat('m/d/Y', $items['I']), 'd/m/Y');
-                //$data['fecha_vencimiento'] = $fecha_DD_MM_YYYY; // 'DD/MM/YYYY'
-                //$data['lote'] = $items['J'];
+              
 
                 return $data;
             
          });
 
-        // $map = $map->sortBy('codigo');
-
-         /*$wherein = $map->map(function($items, $i){
-             $data[$i] = $items['codigo'];
-             return $data;
-         });
-
-         
-         $product = Product::whereIn('codigo',$wherein)
-                    ->orderBy('codigo')
-                    ->where('client_id', $client_id)
-                    ->get();
+      
         
-
-        $matchs = $this->MatchProducts($map, $product);
-
-          */
-        
-        $customer = Customer::where('codigo_valkimia', $customer_codigo_valkimia)->first();
+        $customer = Customer::where('codigo_valkimia', $customer_codigo_valkimia)
+                            ->where('disabled', 0)->first();
         
         $respuesta['numero_remito'] = $this->getNextRemito($client_id);
-        //$respuesta['articulos'] = $matchs;
         $respuesta['pedido'] = $pedido;
 
         $respuesta['articulos'] = $map;
