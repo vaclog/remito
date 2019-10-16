@@ -11,6 +11,7 @@
 |
 */
 
+use Krizalys\Onedrive\Onedrive;
 Route::get('/', function () {
     return view('welcome');
 });
@@ -51,5 +52,18 @@ Route::group(['middleware' => ['auth:web']], function() {
 
 
     Route::resource('files', 'FileController', ['only' => ['store', 'destroy']]);
+
+    Route::get('/onedrive/auth', function(){
+
+        $client = Onedrive::client(env('ONEDRIVE_CLIENT_ID'));
+
+        $url = $client->getLogInUrl([
+            'files.read',
+            'files.read.all',
+            'files.readwrite',
+            'files.readwrite.all',
+            'offline_access',
+        ], env('ONEDRIVE_URI'));
+    });
 }
 );
