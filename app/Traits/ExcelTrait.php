@@ -40,11 +40,14 @@ trait ExcelTrait
         $armado = $request->input('armado');
         $path= $request->file('archivo')->getRealPath();
         
-        $encoding = mb_detect_encoding(file_get_contents($request->file('archivo')),
+        /*$encoding = mb_detect_encoding(file_get_contents($request->file('archivo')),
         // example of a manual detection order
        'ASCII,UTF-8,ISO-8859-15');
 
-        $reader->setInputEncoding($encoding);
+        $reader->setInputEncoding($encoding);*/
+        $reader->setInputEncoding('CP1252');
+        $reader->setDelimiter(';');
+        $reader->setEnclosure('');
         
         $ws = $reader->load($path)->getActiveSheet();
 
