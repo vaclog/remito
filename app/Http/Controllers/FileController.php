@@ -68,9 +68,12 @@ class FileController extends Controller
         */
         $customer_codigo_valkimia = null;
         $pedido = '';
-        $map = $excel->map(function($items, $i) use (&$customer_codigo_valkimia, &$pedido) {
-            
+        $cantidad_lineas = 0;
+        $cantidad_items = 0;
+        $map = $excel->map(function($items, $i) use (&$customer_codigo_valkimia, &$pedido, &$cantidad_lineas, &$cantidad_items) {
+                $cantidad_lineas++;
                 $data['codigo'] = $items['F']; // Articulo
+                $cantidad_items = $cantidad_items + $items['J'];
                 $data['cantidad'] = $items['J'];   // Pickeada
                 $data['descripcion'] = $items['H'];   // Pickeada
                 $data['marca'] = 'no definida';
@@ -104,6 +107,8 @@ class FileController extends Controller
         
         $respuesta['numero_remito'] = $this->getNextRemito($client_id);
         $respuesta['pedido'] = $pedido;
+        $respuesta['cantidad_lineas'] = $cantidad_lineas;
+        $respuesta['cantidad_items'] = $cantidad_items;
 
         $respuesta['articulos'] = $map;
         $respuesta['customer'] = $customer;

@@ -51,7 +51,28 @@
                 ></v-text-field>
                 <input type="date" v-model="fecha" @change="changeFechaRemito" class="display-1"/>
         </div>
+        <div class="form-group">
+            <label for="name">Lineas:</label>
+            <input type="number" 
+            v-model="cantidad_lineas" 
+            disabled
+            class="form-control headline"
+            />
+
+        </div>
+        <div class="form-group">
+            <label for="name">Items:</label>
+            <input type="number" 
+            v-model="cantidad_items" 
+            disabled
+            class="form-control headline"
+            />
+
+        </div>
+        
+        <v-spacer></v-spacer>
     </form>
+    
     <div>
 
         <index-item></index-item>
@@ -68,7 +89,7 @@
 
 <script>
 
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { mapMutations } from 'vuex'
 
 import { mask } from 'vue-the-mask'
@@ -87,6 +108,8 @@ var today = moment().format('YYYY-MM-DD')
                 errors: {'message': 'Hola'},
                 items: [],
                 remito: 0,
+                cantidad_lineas: 0,
+                cantidad_items: 0,
                 
                 problema: false
               
@@ -119,7 +142,6 @@ var today = moment().format('YYYY-MM-DD')
 
                 // handle login
                 setTimeout(() => {
-                    console.log(this)
                 }, 5)
 
                 this.problema = false;
@@ -144,6 +166,8 @@ var today = moment().format('YYYY-MM-DD')
                             this.setArticulos(response.data.articulos)
                             this.setCustomer(response.data.customer)
                             this.setPedido(response.data.pedido)
+                            this.cantidad_lineas = response.data.cantidad_lineas;
+                            this.cantidad_items = response.data.cantidad_items;
                             this.loading = false;
                             })
                     
@@ -164,8 +188,12 @@ var today = moment().format('YYYY-MM-DD')
             this.setFechaRemito(this.fecha)
             
         },
-        computed:
-            mapState(['count', 'articulos', 'fecha_remito', 'numero_remito', 'idcliente' ,'customer',
+        computed:{
+         
+            //mapState(['count', 'articulos', 'fecha_remito', 'numero_remito', 'idcliente' ,'customer',
+            //         'pedido']),
+            ...mapState(['count', 'articulos', 'fecha_remito', 'numero_remito', 'idcliente' ,'customer',
                      'pedido']),
+        }
     }
 </script>

@@ -46,6 +46,7 @@ Vue.use(vuetify)
 import create from './components/homeComponent.vue';
 Vue.component('home', require('./components/homeComponent.vue').default);
 
+
 const routes = [
 
 
@@ -112,6 +113,11 @@ const store = new Vuex.Store({
         idcliente: null,
         pedido: null,
 
+    },
+    getters: {
+        customerSel: state => {
+            return state.customer;
+        }
     },
     mutations: {
         increment(state) {

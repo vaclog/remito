@@ -44,8 +44,7 @@ import { mapState } from 'vuex'
 export default {
    
      mounted() {
-            console.log('Index Item Component mounted.')
-            
+          
         },
   computed:
             mapState(['count', 'articulos']),

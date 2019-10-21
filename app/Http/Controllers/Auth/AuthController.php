@@ -24,4 +24,6 @@ class AuthController extends Controller
 
         return json_decode((string) $response->getBody(), true)['access_token'];
     }
+
+ 
 }

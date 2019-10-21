@@ -80,7 +80,6 @@ import { mapMutations } from 'vuex'
     export default {
         name: 'home',
         mounted() {
-            console.log(this.$route.query.client_id)
             this.setClientId(parseInt(this.$route.query.client_id));
         },
         methods: {

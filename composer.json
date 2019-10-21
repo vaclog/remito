@@ -21,7 +21,8 @@
         "mpdf/mpdf": "^8.0",
         "nesbot/carbon": "^2.24",
         "phpoffice/phpspreadsheet": "^1.8",
-        "spatie/laravel-permission": "^2.37"
+        "spatie/laravel-permission": "^2.37",
+        "league/oauth2-client": "^2.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.2",

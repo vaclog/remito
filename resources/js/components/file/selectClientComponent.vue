@@ -5,11 +5,14 @@
         <div class="form-group">
             <label class="control-label">Company Name</label>
             
-            <v-select v-model="selectedCustomer"
-                    :options="items" label="nombre"
-                    
-                    >
-            </v-select>
+            <v-select
+                v-model="select"
+                :items="customers"
+                item-text="nombre"
+                item-value="id"
+                label="Standard"
+                
+        ></v-select>
         </div>
         <div>
             <div class="row">
@@ -63,23 +66,19 @@
 
 import { mapState } from 'vuex'
 import { mapMutations } from 'vuex'
-import vSelect from 'vue-select'
+import { mapGetters } from 'vuex'
 
-Vue.component('v-select', vSelect)
 
-import 'vue-select/dist/vue-select.css';
 export default {
     data(){
         return {
-            
-            customers: {},
+            customers: [],
             errors: { },
-            selectedCustomer: '',
+            select: [],
             calle: '',
             cuit: '',
             localidad: '',
             provincia: '',
-            items:  [ ],
             cuitRules: [
                 v => !!v || 'CUIT is required',
                 v => v.length <= 11 || 'Name must be less than 11 dígitos',
@@ -113,40 +112,78 @@ export default {
                     'setCustomer'
                 ]
             ),
+        setActivePerson(state, customer) {
+            this.selectedCustomer = customer
+        },
     },
     watch:{
-        selectedCustomer: function(){
-            // if (this.selectedCustomer.length() > 0){
-                //console.log(this.customers[this.selectedCustomer].nombre);
-                console.log(this.selectedCustomer);
-                console.log(this.selectedCustomer);
-                if ( this.selectedCustomer) {
-                    this.cuit = this.selectedCustomer.cuit
-                    this.calle = this.selectedCustomer.calle
-                    this.localidad = this.selectedCustomer.localidad
-                    this.provincia = this.selectedCustomer.provincia
-                    this.setCustomer(this.selectedCustomer)
+        cus: {
+            immediate: true,
+            handler(value) {
+                console.log(value);
+                this.select = value.id;
+            }
+        },
+        
+        select: function(){
+            console.log(this.select)
+
+           var seleccion = this.customers.find(function(e){ 
+               if ( e.id == this.id) 
+               { return e } 
+               }, {id: this.select});
+
+            if ( typeof(seleccion) !== 'undefined') {
+                    this.cuit = seleccion.cuit
+                    this.calle = seleccion.calle
+                    this.localidad = seleccion.localidad
+                    this.provincia = seleccion.provincia
+                    this.setCustomer(seleccion)
                     
                 }
-                else 
-                {
-                    this.cuit = '';
-                    this.calle = ''
-                    this.localidad = ''
-                    this.provincia = ''
-                    this.setCustomer([])
-                }
-            // }
-            
+            else{ 
+                this.cuit = '';
+                this.calle = ''
+                this.localidad = ''
+                this.provincia = ''
+                this.setCustomer([])
+
+            }
 
         }
+        //     // if (this.selectedCustomer.length() > 0){
+        //         //console.log(this.customers[this.selectedCustomer].nombre);
+        //         console.log(this.selectedCustomer);
+        //         console.log(this.selectedCustomer);
+        //         if ( this.selectedCustomer) {
+        //             this.cuit = this.selectedCustomer.cuit
+        //             this.calle = this.selectedCustomer.calle
+        //             this.localidad = this.selectedCustomer.localidad
+        //             this.provincia = this.selectedCustomer.provincia
+        //             this.setCustomer(this.selectedCustomer)
+                    
+        //         }
+        //         else 
+        //         {
+        //             this.cuit = '';
+        //             this.calle = ''
+        //             this.localidad = ''
+        //             this.provincia = ''
+        //             this.setCustomer([])
+        //         }
+        //     // }
+            
+
+        // }
     },
     created() {
       let uri = '/api/customers/' + this.$route.query.client_id;
       axios.get(uri)
       .then(response => {
-        this.customers = response.data.data;
-        this.items = response.data.data;
+        this.customers = response.data;
+        
+        //console.log(this.$store.state.customer)
+        //this.items = response.data.data;
       })
       .catch((error) => {
           console.log('errores varios')
@@ -156,8 +193,17 @@ export default {
 
       })
     },
-    computed:
-    mapState(['count', 'articulos', 'customer']),
+    computed:{
+            ...mapGetters(['customerSel']),
+            ...mapState(['count', 'articulos', 'customer']),
+            cus() {
+                return this.$store.state.customer;
+      
+               
+            }
+    }
+    
+
     
 }
 </script>
