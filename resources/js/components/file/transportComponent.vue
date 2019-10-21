@@ -257,7 +257,7 @@ import { mapMutations } from 'vuex'
                 this.loading = true
                 // handle login
                 setTimeout(() => {
-                    console.log(this)
+             
                 }, 5)
                 this.remito.customer = this.customer
                 this.remito.referencia = this.$store.state.pedido

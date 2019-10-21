@@ -83,13 +83,13 @@ trait ExcelTrait
 
         //$last = Arr::last($highestColumn, null, null);
         /*
-        * Se eliminan los nulos
+        * Se eliminan los productos nulos
         */
         $filtered = Arr::where($dataArray, function ($value, $key) {
             
             return !is_null($value['F']);
         });
-
+        
         $filtered_by_Armado = Arr::where($filtered, function ($value, $key) use ($request){
             return ($value['A'] == $request->input('armado'));
         });
@@ -388,7 +388,7 @@ trait ExcelTrait
         $sp->setActiveSheetIndex(0);
         $i = 1;
         foreach ($remito->articulos as $key => $art) {
-            # code...
+            # code...            
             $registro = [  $numero_remito, 
                             date_format(date_create($remito->fecha_remito), 'Ymd'),
                             'EMP00', 'FC|OEP',
@@ -397,7 +397,8 @@ trait ExcelTrait
                             '1',
                             $art->codigo,
                             $art->cantidad];
-            $sp->getActiveSheet()->fromArray($registro ,null, 'A'.$i);
+
+            $sp->getActiveSheet()->fromArray($registro ,null, 'A'.$i, true);
             $i++;
         }
         

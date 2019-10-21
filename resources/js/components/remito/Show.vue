@@ -189,7 +189,6 @@ export default {
             axios.get('/api/remito?id=' +id)
                 .then((response) => {
                    
-                    console.log(response.data)
                    
                     this.transport = {
                         'nombre': response.data.transporte,
@@ -205,11 +204,9 @@ export default {
                     this.sucursal = response.data.sucursal
                     this.sucursal = this.sucursal.toString().padStart(4,'0')
                     this.remito_id = response.data.numero_remito.toString().padStart(8, '0')
-                    console.log(response.data.fecha_remito)
                     this.fecha = moment(response.data.fecha_remito).format('DD/MM/YYYY')  
                     this.nro_remito = this.sucursal + ' - ' + this.remito_id
 //                    this.articulos = response.data.articulos
-console.log(response.data.articulos)
                     this.setArticulos(response.data.articulos)
 
                     this.observaciones = response.data.observaciones
@@ -228,7 +225,6 @@ console.log(response.data.articulos)
 
     mounted(){
 
-        console.log('mounted')
         this.getRemito(this.id)
     },
     computed:
