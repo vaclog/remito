@@ -109,11 +109,17 @@ Route::group(['middleware' => ['auth:web']], function() {
     });
 
     Route::get('/signin', 'AuthController@signin');
+    Route::get('/signin2', 'AuthController@signin2');
+
     Route::get('/authorize', 'AuthController@gettoken');
+    Route::get('/authorize2', 'AuthController@gettoken');
+
     Route::get('/mail', 'OutlookController@mail')->name('mail');
     Route::get('/root', 'OutlookController@root')->name('root');
     Route::get('/children', 'OutlookController@children')->name('children');
     Route::get('/items', 'OutlookController@items')->name('items');
+    Route::get('/item/{item_id}', 'OutlookController@item')->name('items');
+
 
 
 

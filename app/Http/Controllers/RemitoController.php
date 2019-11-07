@@ -128,4 +128,22 @@ class RemitoController extends Controller
         return $this->toExcelOrien($data);
 
     }
+
+    public function destroy(Request $request, $id)
+    {
+        $user = $request->user()->email;
+        $remito = Remito::find($id);
+        $remito->disabled = 1;
+    
+
+        $remito->audit_updated_by = $user;
+        $remito->save();
+
+        return back()->withInput();
+        // return view('index', compact('remitos', 'clients', 'client_selected'))
+        // ->with('i', ($request->input('page', 1) - 1) * 20);
+    }
+
+   
+
 }
