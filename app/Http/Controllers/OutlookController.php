@@ -108,17 +108,19 @@ class OutlookController extends Controller
           $getMessagesUrl = '/me/drive/root/children';
           $messages = $graph->createCollectionRequest("GET", $getMessagesUrl)
                         ->setReturnType(Model\DriveItem::class)
-                        ->setPageSize(2);
+                        ->execute();
         
-
-           $docs = $messages->getPage();
+         
+           
            $docArray = [];
-           foreach ($docs as $doc){
-            $docArray[] = $doc->getName();
+           foreach ($messages as $doc){
+             $docArray[] = $doc->getName();
             }   
             // foreach ($docs as $doc){
             //     $docArray[] = $doc->getName();
             // }
+
+
           return $docArray;
     }
 
@@ -152,6 +154,42 @@ class OutlookController extends Controller
           $getMessagesUrl = '/me/drive/items/'.'01LKUVJTN6Y2GOVW7725BZO354PWSELRRZ/children';
           $messages = $graph->createRequest('GET', $getMessagesUrl)
                             //->setReturnType(Model\DriveItem::class)
+                            ->execute();
+        
+          return $messages;
+    }
+
+
+    public function item(Request $request)
+    {
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $tokenCache = new \App\TokenStore\TokenCache;
+
+        $graph = new Graph();
+        $graph->setAccessToken($tokenCache->getAccessToken());
+
+        $user = $graph->createRequest('GET', '/me')
+                        ->setReturnType(Model\User::class)
+                        ->execute();
+
+        echo 'User: '.$user->getDisplayName().'<br/>';
+        $messageQueryParams = array (
+            // Only return Subject, ReceivedDateTime, and From fields
+            "\$select" => "subject,receivedDateTime,from",
+            // Sort by ReceivedDateTime, newest first
+            "\$orderby" => "receivedDateTime DESC",
+            // Return at most 10 results
+            "\$top" => "10"
+          );
+        
+          //$getMessagesUrl = '/me/mailfolders/inbox/messages?'.http_build_query($messageQueryParams);
+          
+          $getMessagesUrl = '/me/drive/items/'.$request->item_id.'/children';
+          $messages = $graph->createRequest('GET', $getMessagesUrl)
+                            ->setReturnType(Model\DriveItem::class)
                             ->execute();
         
           return $messages;

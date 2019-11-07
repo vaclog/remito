@@ -40,7 +40,22 @@
         </div>
     
     </div>
+    {{--  <div class="row">
+        <div class="col-12">
+            {!! Form::open(['method' => 'GET','route' => ['remitos.index', $client_selected],'style'=>'display:inline']) !!}
+            <div class="form-group">
+            {!! Form::text('buscar', null, [ 'class' => 'form-control'])!!}
+            {!! Form::button('Buscar', ['type' => 'submit', 'class' => 'form-control btn btn-danger btn-sm']) !!}
+            </div>
 
+
+
+           
+           
+            {!! Form::close() !!}
+        </div>
+            
+    </div>  --}}
 
     @if ($message = Session::get('success'))
     <div class="alert alert-success">
@@ -50,46 +65,64 @@
 
 
     <table class="table table-bordered responsive">
-    <tr>
-            <th>No Remito</th>
-            <th>Fecha<br>Remito</th>
-            <th>Nro Pedido</th>
-
-            <th>Cliente</th>
-            <th>Direccion entrega</th>
-            <th>Transportista</th>
-            <th width="160px">Action</th>
-    </tr>
-        @foreach ($remitos as $key => $remito)
-        <tr>  
-
-            <td class="text-center">{{ str_pad( $remito->sucursal, 4, "0", STR_PAD_LEFT).'-'.str_pad( $remito->numero_remito, 8, "0", STR_PAD_LEFT)}}</td>
-            <td class="text-center">{{ (strtotime($remito->fecha_remito)> 0)?date_format(date_create($remito->fecha_remito), 'd/m/Y'):'' }}</td>
-            <td>{{ $remito->referencia}}</td>
-            <td>{{ $remito->customer->nombre}}</td>
-            <td>{{ $remito->calle}} <br> {{$remito->localidad}}<br>{{$remito->provincia}}</td>
-            <td >Trans: {{$remito->transporte}}<br>Cond: {{$remito->conductor}}<br>Pat: {{$remito->patente}}</td>
-            <td class="text-center">
+        <thead>
+            <tr>
+                <th>No Remito</th>
+                <th>Fecha<br>Remito</th>
+                <th>Nro Pedido</th>
+    
+                <th>Cliente</th>
+                <th>Direccion entrega</th>
+                <th>Transportista</th>
+                <th width="220px">Action</th>
+            </tr>
                 
-                @can('role-edit')
-                    <a class="btn btn-primary btn-sm" href="{{ route('remitos.show',$remito->id) }}">
-                        <i class="material-icons md-24" title="Detalle">description</i>
-                    </a>
-                    <a class="btn btn-success btn-sm" href="{{ url('/api/remito/print?id='.$remito->id) }}">
-                        <i class="material-icons md-24" title="Ver Pdf">picture_as_pdf</i>
-                    </a>
-                    <a class="btn btn-secondary btn-sm" href="{{ url('/api/remito/excel?id='.$remito->id) }}">
-                        <i class="material-icons md-24" title="Bajada a Excel">save_alt</i>
+        </thead>
+        <tbody>
+                @foreach ($remitos as $key => $remito)
+                @if ($remito->disabled === 0)
+                <tr> 
+                @else
+                <tr style="background-color: pink">
+                @endif
+                    @if ( $remito->disabled === 0)
+                    <td class="text-center">{{ str_pad( $remito->sucursal, 4, "0", STR_PAD_LEFT).'-'.str_pad( $remito->numero_remito, 8, "0", STR_PAD_LEFT)}}</td>
+                    @else
+                    <td class="text-center">{{ str_pad( $remito->sucursal, 4, "0", STR_PAD_LEFT).'-'.str_pad( $remito->numero_remito, 8, "0", STR_PAD_LEFT)}}</br><strong class="text-danger">ANULADO</strong></td>
+                    @endif<td class="text-center">{{ (strtotime($remito->fecha_remito)> 0)?date_format(date_create($remito->fecha_remito), 'd/m/Y'):'' }}</td>
+                    <td>{{ $remito->referencia}}</td>
+                    <td>{{ $remito->customer->nombre}}</td>
+                    <td>{{ $remito->calle}} <br> {{$remito->localidad}}<br>{{$remito->provincia}}</td>
+                    <td >Trans: {{$remito->transporte}}<br>Cond: {{$remito->conductor}}<br>Pat: {{$remito->patente}}</td>
+                    <td class="text-center" style="vertical-align:middle">
+                        
+                        @can('role-edit')
+                            <a class="btn btn-primary btn-sm" href="{{ route('remitos.show',$remito->id) }}">
+                                <i class="material-icons md-24" title="Detalle">description</i>
+                            </a>
+                            
+                            <a class="btn btn-success btn-sm" href="{{ url('/api/remito/print?id='.$remito->id) }}">
+                                <i class="material-icons md-24" title="Ver Pdf">picture_as_pdf</i>
+                            </a>
+                            <a class="btn btn-secondary btn-sm" href="{{ url('/api/remito/excel?id='.$remito->id) }}">
+                                <i class="material-icons md-24" title="Bajada a Excel">save_alt</i>
+        
+                            </a>
+                            {!! Form::open(['method' => 'DELETE','route' => ['remitos.destroy', $remito->id],'style'=>'display:inline']) !!}
+                            {!! Form::button('<i class="material-icons md-24" title="Anular Remito">delete_outline</i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-sm']) !!}
+                            {!! Form::close() !!}
+                            
+        
+        
+                        @endcan
+                            
+              
+                    </td>
+                </tr>
+                @endforeach
 
-                    </a>
-
-
-                @endcan
-                    
-      
-            </td>
-        </tr>
-        @endforeach
+        </tbody>
+        
     </table>
 
 

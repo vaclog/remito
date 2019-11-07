@@ -27,7 +27,7 @@ class HomeController extends Controller
     public function index( Request $request)
     {
         $client_selected = $request->input('client_selected');
-        
+        session('client_selected', $client_selected);
         $clients = Client::where('disabled', 0)->get();
 
         if (empty($client_selected)) {
@@ -39,8 +39,7 @@ class HomeController extends Controller
         }
         
 
-        $remitos = Remito::where('disabled', 0)
-                    ->where('client_id', $client_selected)
+        $remitos = Remito::where('client_id', $client_selected)
                     ->orderBy('created_at', 'desc')
                     ->with('customer');
 
