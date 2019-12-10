@@ -8,6 +8,7 @@ use App\Remito;
 use App\RemitoArticulo;
 use Auth;
 use App\Traits\ExcelTrait;
+use App\Traits\GraphTrait;
 use Illuminate\Support\Facades\DB;
 use \Mpdf\Mpdf;
 use Carbon\Carbon;
@@ -20,7 +21,7 @@ use App\Client;
 class RemitoController extends Controller
 {
     //
-    use ExcelTrait;
+    use ExcelTrait, GraphTrait;
     
 
     public function store(Request $request){
@@ -74,6 +75,9 @@ class RemitoController extends Controller
                 $articulo->save();
             }
         }, 5);
+
+        $interfaz = $this->interfaceRemitoOrien($remito);
+        if(!$interfaz) die('Error de Interfaces');
         
         
         return response()->json( $remito);
@@ -126,7 +130,7 @@ class RemitoController extends Controller
         $data = $remito;
         
         return $this->toExcelOrien($data);
-
+       
     }
 
     public function destroy(Request $request, $id)

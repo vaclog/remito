@@ -1,18 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Traits;
 
-use Illuminate\Http\Request;
 use Microsoft\Graph\Graph;
 
 use Microsoft\Graph\Model;
 
-use App\Remito;
-use Carbon\Carbon;
-
-
-
-class GraphController extends Controller
+trait GraphTrait 
 {
     //
 
@@ -124,33 +118,10 @@ class GraphController extends Controller
 
     public function _upload($graph, $RootMasterId, $RepositoryId, $stream, $filename){
 
-        //$client = new Client();
-        //$url ='https://graph.microsoft.com/v1.0';
-        //$filename = 'archivo_nombre3.csv';
+      
         $api = '/drives/'.$RootMasterId.'/items/'.$RepositoryId.':/'.$filename.':/content';
-        //$authentication = $this->getToken();
-       
-       /* 
-       $res = $client->request(
-                'PUT',
-                $url.$api,
-                     [
-                    
-                        'headers' =>  [ 
-                                                                             
-                           
-                            'Authorization' => 'Bearer '.$authentication,
-                            'Content-Type' => 'text/csv; charset=ISO-8859-1'
-
-                        ],
-                        'body' => 'Hola'
-                            
-                                           ]
-                
-
-
-        );
-        */
+             
+      
 
         $res = $graph->createCollectionRequest('PUT',$api)
                     ->attachBody($stream)
@@ -257,11 +228,5 @@ class GraphController extends Controller
         return $token;
     }
 
-    public function init(Request $request){
-
-        $remito = Remito::where('id', $request->id)
-        ->with('customer', 'articulos', 'client')->first();
-        
-        return $this->interfaceRemitoOrien($remito);
-    }
+    
 }
