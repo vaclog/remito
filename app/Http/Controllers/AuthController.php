@@ -47,9 +47,9 @@ class AuthController extends Controller
           // Authorization code should be in the "code" query param
           if (isset($_GET['code'])) {
             // Check that state matches
-            if (empty($_GET['state']) || ($_GET['state'] !== $_SESSION['oauth_state'])) {
+            /*if (empty($_GET['state']) || ($_GET['state'] !== $_SESSION['oauth_state'])) {
               exit('State provided in redirect does not match expected value.');
-            }
+            }*/
         
             // Clear saved state
             unset($_SESSION['oauth_state']);
@@ -83,6 +83,8 @@ class AuthController extends Controller
           elseif (isset($_GET['error'])) {
             exit('ERROR: '.$_GET['error'].' - '.$_GET['error_description']);
           }
+
+          return redirect('home');
     }
 
     public function signin2()

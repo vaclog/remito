@@ -40,5 +40,5 @@ Route::get('/remito', 'RemitoController@detail');
 
 
 Route::get('/remito/print', 'RemitoController@print');
-Route::get('/remito/excel', 'RemitoController@excel');
+Route::get('/remito/excel', 'GraphController@init');
 
