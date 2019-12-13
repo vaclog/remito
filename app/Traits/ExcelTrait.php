@@ -49,6 +49,10 @@ trait ExcelTrait
         $reader->setDelimiter(';');
         $reader->setEnclosure('');
         
+        $reader->setSheetIndex(0);
+        
+        
+        //$spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($path);
         $ws = $reader->load($path)->getActiveSheet();
 
 
@@ -60,7 +64,7 @@ trait ExcelTrait
         $highestColumn = ['S']; // e.g 'F'
 
         if(sizeof($highestRow) <= 1){
-            $lastRowIndex = 1000;
+            $lastRowIndex = 10000;
         }
         else{
             $lastRowIndex = sizeof($highestRow);
