@@ -22,7 +22,7 @@ class RemitoController extends Controller
 {
     //
     use ExcelTrait, GraphTrait;
-    
+
 
     public function store(Request $request){
         $remito = null;
@@ -30,13 +30,15 @@ class RemitoController extends Controller
 
 
         $cliente = Client::find($request->client_id);
-        DB::transaction(function() use ($request, &$remito, $cliente) {
+        $referencia = substr($request->referencia, 3); // TODO: Solo guardar nuemero sin el OEP o OEI
+
+        DB::transaction(function() use ($request, &$remito, $cliente, $referencia) {
             $remito = Remito::create([
                 'sucursal' => $cliente->sucursal,
                 'numero_remito' => $request->numero_remito,
                 'fecha_remito' => $request->fecha_remito,
                 'observaciones' => $request->observaciones,
-                'referencia' => $request->referencia,
+                'referencia' => $referencia,
 
                 'cai' => $cliente->cai,
                 'cai_vencimiento' => $cliente->cai_vencimiento,
@@ -55,6 +57,14 @@ class RemitoController extends Controller
 
             foreach($request->articulos as $item)
             {
+                /****
+                 *  Para Orien se debe eliminar el String OEP o OEI del pedido
+                 *
+                 */
+
+                 $tipo = substr($item['pedido'], 0, 3);
+                $pedido = substr($item['pedido'], 3, strlen($item['pedido'])); // TODO: Solo guardar nuemero sin el OEP o OEI
+
                 $articulo = new RemitoArticulo([
                     'codigo' => $item['codigo'],
                     'descripcion' => $item['descripcion'],
@@ -66,20 +76,23 @@ class RemitoController extends Controller
                     'fecha_vencimiento' => ($item['fecha_vencimiento'])?Carbon::createFromFormat('d/m/Y', $item['fecha_vencimiento']):null,
                     'unidad_medida'=> $item['unidad_medida'],
                     'lote' => $item['lote'],
-                    'referencia' => strval($item['pedido']),
+                    'referencia' => $pedido,
+
                     'disabled' => 0,
                     'audit_created_by' => Auth::user()->email,
-                    'client_id' => $remito->client_id
+                    'client_id' => $remito->client_id,
+                    'tipo_nota_venta' => $tipo
                 ]);
 
                 $articulo->save();
+
             }
         }, 5);
 
         $interfaz = $this->interfaceRemitoOrien($remito);
         if(!$interfaz) die('Error de Interfaces');
-        
-        
+
+
         return response()->json( $remito);
     }
 
@@ -89,7 +102,7 @@ class RemitoController extends Controller
 
         return view('show', compact('remito'));
 
-        
+
 
     }
 
@@ -99,7 +112,7 @@ class RemitoController extends Controller
     }
 
     public function create(Request $request){
-        
+
         $client_id = $request->input('client_id');
         $client = Client::find($client_id);
         return view ('home', compact('client'));
@@ -112,7 +125,7 @@ class RemitoController extends Controller
                 ->with('customer', 'articulos', 'client')->first();
         $data = $remito;
 
-       
+
         $pdf = PDF::loadView('templates.remito.orien', compact('data'));
         return $pdf->download('remito.pdf');
         //return view('templates.remito.orien', compact('data'));
@@ -121,16 +134,16 @@ class RemitoController extends Controller
        //return $this->RemitoPrintManager($request, $remito);
 
        //return $this->test1($remito);
-       
+
     }
 
     public function excel(Request $request){
         $remito = Remito::where('id', $request->id)
                 ->with('customer', 'articulos', 'client')->first();
         $data = $remito;
-        
+
         return $this->toExcelOrien($data);
-       
+
     }
 
     public function destroy(Request $request, $id)
@@ -138,7 +151,7 @@ class RemitoController extends Controller
         $user = $request->user()->email;
         $remito = Remito::find($id);
         $remito->disabled = 1;
-    
+
 
         $remito->audit_updated_by = $user;
         $remito->save();
@@ -148,6 +161,6 @@ class RemitoController extends Controller
         // ->with('i', ($request->input('page', 1) - 1) * 20);
     }
 
-   
+
 
 }

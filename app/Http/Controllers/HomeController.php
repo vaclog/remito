@@ -31,25 +31,42 @@ class HomeController extends Controller
         $clients = Client::where('disabled', 0)->get();
 
         if (empty($client_selected)) {
-            $firstClient = $clients->first();    
+            $firstClient = $clients->first();
             $client_selected =$firstClient->id;
 
         }else {
             $firstClient['id'] = $client_selected;
         }
-        
 
-        $remitos = Remito::where('client_id', $client_selected)
-                    ->orderBy('created_at', 'desc')
+
+        $remitos = Remito::select('remitos.*')->where('remitos.client_id', $client_selected)
+                        ->join('customers','customer_id', 'customers.id');
+
+        $busqueda = $request->input('q');
+        if( $busqueda!= ''){
+            $remitos = $remitos->where('referencia', 'LIKE', '%'.$busqueda.'%');
+            $remitos = $remitos->orWhere('remitos.calle', 'LIKE', '%'.$busqueda.'%');
+            $remitos = $remitos->orWhere('customers.nombre','LIKE', '%'.$busqueda.'%');
+            $remitos = $remitos->orWhere('remitos.numero_remito', 'LIKE', '%'.$busqueda.'%');
+        }
+
+        $remitos = $remitos->orderBy('remitos.created_at', 'desc')
                     ->with('customer');
 
-        $remitos = $remitos->paginate(20);
-
-        return view('index', compact('remitos', 'clients', 'client_selected'))
+        $remitos = $remitos->paginate(20)
+                        ->appends([ 'q' => $busqueda,
+                                'clients' => $clients,
+                                'client_selected' => $client_selected])
+                        ;
+        $q = $busqueda;
+        return view('index', compact('remitos', 'clients', 'client_selected', 'q'))->withQuery($q)
                 ->with('i', ($request->input('page', 1) - 1) * 20);
 
 
-       
-        
+
+
     }
+
+
+
 }

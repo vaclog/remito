@@ -39,7 +39,7 @@ trait ExcelTrait
         $client_id = $request->input('client_id');
         $armado = $request->input('armado');
         $path= $request->file('archivo')->getRealPath();
-        
+
         /*$encoding = mb_detect_encoding(file_get_contents($request->file('archivo')),
         // example of a manual detection order
        'ASCII,UTF-8,ISO-8859-15');
@@ -48,16 +48,16 @@ trait ExcelTrait
         $reader->setInputEncoding('CP1252');
         $reader->setDelimiter(';');
         $reader->setEnclosure('');
-        
-        $reader->setSheetIndex(0);
-        
-        
+
+        //$reader->setSheetIndex(0);
+
+
         //$spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($path);
         $ws = $reader->load($path)->getActiveSheet();
 
 
-        
-       
+
+
         //dd($ws->getRowDimensions());
 
         $highestRow = $ws->getRowDimensions(); // e.g. 10
@@ -69,13 +69,13 @@ trait ExcelTrait
         else{
             $lastRowIndex = sizeof($highestRow);
         }
-            
-        
+
+
         //$sp->setActiveSheetIndex(0);
         $lastColumnString = 'S';//Coordinate::stringFromColumnIndex(sizeof($highestColumn));
-        
 
-        
+
+
         $dataArray = $ws->rangeToArray(
         'A3:'.$lastColumnString.$lastRowIndex,     // The worksheet range that we want to retrieve
         NULL,        // Value that should be returned for empty cells
@@ -90,22 +90,22 @@ trait ExcelTrait
         * Se eliminan los productos nulos
         */
         $filtered = Arr::where($dataArray, function ($value, $key) {
-            
+
             return !is_null($value['F']);
         });
-        
+
         $filtered_by_Armado = Arr::where($filtered, function ($value, $key) use ($request){
             return ($value['A'] == $request->input('armado'));
         });
-       
+
         return $filtered_by_Armado;
 
     }
 
     public function RemitoPrint(Request $request, $remito ){
-            
+
             set_time_limit(0);
-           
+
             $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader("Xlsx");
             $sp = $reader->load("assets/templates/REMITO_PRINT2.xlsx");
 
@@ -121,7 +121,7 @@ trait ExcelTrait
             $drawing->setHeight(100);
 
             $drawing->setWorksheet($sp->getActiveSheet());
-    
+
             $r = $remito;
 
             $numero_remito = str_pad( $r->sucursal, 4, "0", STR_PAD_LEFT).'-'.str_pad( $r->numero_remito, 8, "0", STR_PAD_LEFT);
@@ -134,9 +134,9 @@ trait ExcelTrait
             $transporte = $r->transporte;
             $chofer = $r->conductor;
             $patente = $r->patente;
-            
+
             $ws = $sp->getActiveSheet()->setCellValue("E2", $numero_remito);
-            
+
             $ws = $sp->getActiveSheet()->setCellValue("F3", $fecha_remito);
             $ws = $sp->getActiveSheet()->setCellValue("B7", $destinatario);
             $ws = $sp->getActiveSheet()->setCellValue("B8", $domicilio);
@@ -148,7 +148,7 @@ trait ExcelTrait
             $ws = $sp->getActiveSheet()->setCellValue("B11", $chofer);
             $ws = $sp->getActiveSheet()->setCellValue("F11", $patente);
 
-              
+
             \PhpOffice\PhpSpreadsheet\Shared\StringHelper::setDecimalSeparator(',');
             \PhpOffice\PhpSpreadsheet\Shared\StringHelper::setThousandsSeparator('.');
             $i = 0;
@@ -159,7 +159,7 @@ trait ExcelTrait
                 $codigo = $a->codigo;
                 $descripcion = $a->descripcion;
                 $marca = $a->marca;
-                
+
                 $ws = $sp->getActiveSheet()->insertNewRowBefore(($fromrow + $i), 1);
                 $ws = $sp->getActiveSheet()->mergeCells('A'.($fromrow + $i).':B'.($fromrow + $i));
                 //$ws = $sp->getActiveSheet()->mergeCells('C'.($fromrow + $i).':G'.($fromrow + $i));
@@ -185,7 +185,7 @@ trait ExcelTrait
                     // 'color'=> \PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE,
                 ]
             ];
-            
+
             $sp->getActiveSheet()->getStyle('A'.($fromrow + $i + 6).':G'.($fromrow + $i + 6))->applyFromArray($style);
 
             $firma = 'FIRMA';
@@ -200,35 +200,35 @@ trait ExcelTrait
 
 
 
-            
+
             $this->setHeader('Remito.pdf');
-    
-            
+
+
             $writer = new \PhpOffice\PhpSpreadsheet\Writer\Pdf\Mpdf($sp);
-            
+
             $writer->save('php://output');
-           
-            
-       
+
+
+
     }
 
     public function RemitoPrintManager( Request $request, $remito){
         switch ($remito->client_id){
-            case 1: 
+            case 1:
                 $this->RemitoPrint($request, $remito);
                 break;
             case 2:
                 $this->RemitoPrintOrien($request, $remito);
                 break;
-            
+
         }
 
     }
 
     public function RemitoPrintOrien(Request $request, $remito ){
-            
+
         set_time_limit(0);
-       
+
         $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader("Xlsx");
         $sp = $reader->load("assets/templates/REMITO_ORIEN_EXCEL_2.xlsx");
 
@@ -247,9 +247,9 @@ trait ExcelTrait
         $transporte = $r->transporte;
         $chofer = $r->conductor;
         $patente = $r->patente;
-        
+
         $ws = $sp->getActiveSheet()->setCellValue("E2", $numero_remito);
-        
+
         $ws = $sp->getActiveSheet()->setCellValue("F3", $fecha_remito);
         $ws = $sp->getActiveSheet()->setCellValue("B7", $destinatario);
         $ws = $sp->getActiveSheet()->setCellValue("B8", $domicilio);
@@ -261,7 +261,7 @@ trait ExcelTrait
         $ws = $sp->getActiveSheet()->setCellValue("B11", $chofer);
         $ws = $sp->getActiveSheet()->setCellValue("F11", $patente);
 
-          
+
         \PhpOffice\PhpSpreadsheet\Shared\StringHelper::setDecimalSeparator(',');
         \PhpOffice\PhpSpreadsheet\Shared\StringHelper::setThousandsSeparator('.');
         $i = 0;
@@ -272,7 +272,7 @@ trait ExcelTrait
             $codigo = $a->codigo;
             $descripcion = $a->descripcion;
             $marca = $a->marca;
-            
+
             $ws = $sp->getActiveSheet()->insertNewRowBefore(($fromrow + $i), 1);
             $ws = $sp->getActiveSheet()->mergeCells('A'.($fromrow + $i).':B'.($fromrow + $i));
             //$ws = $sp->getActiveSheet()->mergeCells('C'.($fromrow + $i).':G'.($fromrow + $i));
@@ -298,7 +298,7 @@ trait ExcelTrait
                 // 'color'=> \PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE,
             ]
         ];
-        
+
         $sp->getActiveSheet()->getStyle('A'.($fromrow + $i + 6).':G'.($fromrow + $i + 6))->applyFromArray($style);
 
         $firma = 'FIRMA';
@@ -309,19 +309,19 @@ trait ExcelTrait
         $ws = $sp->getActiveSheet()->setCellValue("C".($fromrow + $i + 6), $aclaracion);
         $ws = $sp->getActiveSheet()->setCellValue("D".($fromrow + $i + 6), $dni);
         $ws = $sp->getActiveSheet()->setCellValue("G".($fromrow + $i + 6), $fecha);
-        
-        
-        
+
+
+
         // $writer = new \PhpOffice\PhpSpreadsheet\Writer\Pdf\Mpdf($sp);
-        
+
         // $writer->save('php://output');
 
         $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($sp);
         $this->setHeaderXlsx('Remito.xlsx');
         $writer->save('php://output');
-       
-        
-   
+
+
+
 }
 
     public function setHeaderXlsx($filename){
@@ -343,7 +343,7 @@ trait ExcelTrait
         //header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         //header('Content-Type: application/csv');
         //header('Content-Type: text/csv');
-        
+
         header('Content-Type: application/vnd.msexcel');
         header('Content-Disposition: attachment;filename="'.$filename.'"');
         header('Cache-Control: max-age=0');
@@ -378,7 +378,7 @@ trait ExcelTrait
         header('Pragma: public'); // HTTP/1.0
     }
 
-    
+
 
 
     public function toExcelOrien($remito){
@@ -388,12 +388,12 @@ trait ExcelTrait
         $sp->getProperties()
            ->setCreator('VACLOG WD')
            ->setTitle('RT-ORIEN-'.$numero_remito);
-        
+
         $sp->setActiveSheetIndex(0);
         $i = 1;
         foreach ($remito->articulos as $key => $art) {
-            # code...            
-            $registro = [  $numero_remito, 
+            # code...
+            $registro = [  $numero_remito,
                             date_format(date_create($remito->fecha_remito), 'Ymd'),
                             'EMP00', 'FC|OEP',
                             $art->referencia,
@@ -405,9 +405,9 @@ trait ExcelTrait
             $sp->getActiveSheet()->fromArray($registro ,null, 'A'.$i, true);
             $i++;
         }
-        
 
-        
+
+
         $writer = new \PhpOffice\PhpSpreadsheet\Writer\Csv($sp);
         $writer->setDelimiter(';');
         $writer->setEnclosure('');
@@ -417,7 +417,7 @@ trait ExcelTrait
         //$this->setHeaderCsv($archivo);
         //$writer->save('php://output');
 
-        
+
         // return response((string) $writer->save('php://output'), 200, [
         //     'Content-Type' => 'text/csv',
         //     'Content-Transfer-Encoding' => 'binary',
@@ -434,13 +434,13 @@ trait ExcelTrait
         $response->headers->set('Content-Disposition', 'attachment;filename="'.$archivo.'"');
         $response->headers->set('Cache-Control','max-age=0');
         return $response;
-       
 
-        
 
-        
+
+
+
 //        $writer->save($archivo);
-       
+
     }
 
     public function test1($remito){
@@ -454,7 +454,7 @@ trait ExcelTrait
                 'margin_footer' => 10
             ]);
 
-        
+
         $mPDF->SetHTMLHeader(
         '  <table style="width: 100%; font-family: Arial, Helvetica, sans-serif;
         ">
@@ -467,7 +467,7 @@ trait ExcelTrait
                     border-width: 1px">R</td>
                 <td style="width: 77px;text-align: center;
                     font-size: x-large;
-                    
+
                     border-width: 1px"><strong>REMITO</strong></td>
                 <td style="font-size: small;
                     text-align: center">DOCUMENTO NO VÁLIDO COMO FACTURA</td>
@@ -477,21 +477,21 @@ trait ExcelTrait
                 <td class="auto-style1" style="width: 77px">&nbsp;</td>
                 <td class="auto-style1">&nbsp;</td>
             </tr>
-       
+
             <tr>
                 <td style="width: 422px">&nbsp;</td>
                 <td style="width: 112px">&nbsp;</td>
                 <td>&nbsp;</td>
             </tr>
         </table>
-    '  
-        
-        
-        
+    '
+
+
+
         );
 
         $mPDF->SetFooter('|Printed using mPDF|');
-        
+
         $mPDF->SetColumns(2);
         $mPDF->WriteHTML('Some text...');
         $mPDF->AddColumn();
