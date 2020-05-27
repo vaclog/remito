@@ -6,7 +6,7 @@ use Microsoft\Graph\Graph;
 
 use Microsoft\Graph\Model;
 
-trait GraphTrait 
+trait GraphTrait
 {
     //
 
@@ -33,11 +33,11 @@ trait GraphTrait
         $this->clientId  = env('OAUTH_APP_ID');
         $this->endpoint = "https://login.microsoftonline.com/".env('OAUTH_TENANT_ID').'/oauth2/v2.0/token';
         $this->clientSecret = env('OAUTH_APP_PASSWORD');
-        
+
     }
     public function interfaceRemitoOrien($remito)
     {
-        if ($this->graphClient == null) 
+        if ($this->graphClient == null)
         {
             $this->graphClient = new Graph();
             $this->graphClient->setAccessToken($this->getAccessToken());
@@ -53,24 +53,31 @@ trait GraphTrait
 
         $stream = sprintf("1212121,00;lalalajs;0,44\n");
         $stream .= sprintf("1212121,00;lalalajs;0,44\n");
-       
+
 
         $numero_remito = str_pad( $remito->sucursal, 4, "0", STR_PAD_LEFT).'-'.str_pad( $remito->numero_remito, 8, "0", STR_PAD_LEFT);
         $filename  = 'RT-ORIEN-'.$numero_remito.'.csv';
-        
-        
-        
+
+
+
         $registro = '';
         $separador = ';';
         foreach ($remito->articulos as $key => $art) {
-            # code...            
+            # code...
+            /** TODO a pedido de orien hay que separar los tipos de ordenes de venta OEP y OEI
+             *  hay que agregar un nuevo campo en la DB tabla de articulos para almacenar el dato
+             *  cuando el campo sea null por defaul 'FC|OEP', para mantener compatibilidad con lo antetior
+             *
+             * */
+            $tipo_nota_venta = ($art->tipo_nota_venta)?$art->tipo_nota_venta:'FC|OEP';
+
             $registro .=     $numero_remito.
-                            $separador. 
+                            $separador.
                             date_format(date_create($remito->fecha_remito), 'Ymd').
                             $separador.
                             'EMP00'.
                             $separador.
-                            'FC|OEP'.
+                            'FC|'.$tipo_nota_venta.
                             $separador.
                             $art->referencia.
                             $separador.
@@ -82,9 +89,9 @@ trait GraphTrait
                             $separador.
                             $art->cantidad.PHP_EOL;
 
-            
+
         }
-        
+
 
         $fileok = $this->_upload($graph, $this->_RootMasterId, $RepositoryId, $registro, $filename);
 
@@ -92,11 +99,11 @@ trait GraphTrait
     }
 
     public function _getUserId($graph){
-       
+
         $results = $graph->createCollectionRequest('GET', '/users/?$filter=startswith(mail, \''.env('ONEDRIVE_USERNAME').'\')')
         ->setReturnType(Model\User::class)
         ->setPageSize(1);
-        
+
 
         $users = $results->getPage();
 
@@ -107,30 +114,30 @@ trait GraphTrait
                 $UserId = $user->getId();
                 return $UserId;
             }
-          
+
 
         }
 
-        
+
         return '';
 
     }
 
     public function _upload($graph, $RootMasterId, $RepositoryId, $stream, $filename){
 
-      
+
         $api = '/drives/'.$RootMasterId.'/items/'.$RepositoryId.':/'.$filename.':/content';
-             
-      
+
+
 
         $res = $graph->createCollectionRequest('PUT',$api)
                     ->attachBody($stream)
                     ->setReturnType(Model\DriveItem::class)
-                    
+
                     ->execute();
 
-                                    
-       
+
+
         return $res->getId();
 
 
@@ -145,7 +152,7 @@ trait GraphTrait
 
         return $folders->getId();
 
-        
+
 
     }
     public function _getRootId($graph, $RootMasterId){
@@ -166,9 +173,9 @@ trait GraphTrait
 
         }
 
-        
+
         $RepositoryId = $page->getId();
-                
+
 
 
         //
@@ -194,7 +201,7 @@ trait GraphTrait
         $RootMasterId = $page->getId();
 
 
-                
+
 
 
         //
@@ -212,7 +219,7 @@ trait GraphTrait
                 ."&scope=".$this->scope
                 ."&client_id=".$this->clientId
                 ."&client_secret=".$this->clientSecret;
-                
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $this->endpoint);
         curl_setopt($ch, CURLOPT_POST, 1);
@@ -228,5 +235,5 @@ trait GraphTrait
         return $token;
     }
 
-    
+
 }
