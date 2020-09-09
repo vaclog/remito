@@ -8,8 +8,8 @@ class Customer extends Model
 {
     //
 
-    protected $fillable = ['codigo', 'nombre', 'calle', 'cuit', 'localidad', 'provincia', 
-    'disabled', 'client_id', 'audit_created_by', 'audit_updated_by'];
+    protected $fillable = ['codigo', 'nombre', 'calle', 'cuit', 'localidad', 'provincia',
+    'disabled', 'client_id', 'audit_created_by', 'audit_updated_by', 'codigo_valkimia'];
 
 
     public function client(){

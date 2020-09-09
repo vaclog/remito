@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Product;
 use App\Client;
 use Auth;
+use Illuminate\Support\Arr;
+
 
 
 use Illuminate\Http\Request;
@@ -23,17 +25,17 @@ class ProductController extends Controller
 
 
         $products = Product::orderBy('descripcion','ASC');
-        
+
         if( $request->buscar){
             $products = $products->where('descripcion', 'LIKE', '%'.$request->buscar.'%');
             $products = $products->orWhere('marca', 'LIKE', '%'.$request->buscar.'%');
             $products = $products->orWhere('codigo', 'LIKE', '%'.$request->buscar.'%');
         }
-        
+
         $products = $products->paginate(20);
         return view('admin.products.index',compact('products'))
                 ->with('i', ($request->input('page', 1) - 1) * 20);
-        
+
     }
 
     /**
@@ -48,8 +50,8 @@ class ProductController extends Controller
         $clients = Client::select('id', 'razon_social')->where('disabled', 0)
         ->orderBy('razon_social')->get();
 
-        $clients = 
-        array_pluck($clients, 'razon_social', 'id');
+        $clients =
+        Arr::pluck($clients, 'razon_social', 'id');
         return view('admin.products.create',compact('clients'));
     }
 
@@ -80,12 +82,12 @@ class ProductController extends Controller
 
             'disabled' => 0
           ]);
-    
+
           $product->audit_created_by = Auth::user()->email;
-    
-    
+
+
           $product->save();
-    
+
           return redirect()->route('products.index')
                             ->with('success','Product created successfully');
     }
@@ -114,8 +116,8 @@ class ProductController extends Controller
         $clients = Client::select('id', 'razon_social')->where('disabled', 0)
                     ->orderBy('razon_social')->get();
 
-        $clients = 
-        array_pluck($clients, 'razon_social', 'id');
+        $clients =
+        Arr::pluck($clients, 'razon_social', 'id');
         //return response()->json($client);
         return view('admin.products.edit',compact('product', 'clients'));
     }
@@ -127,7 +129,7 @@ class ProductController extends Controller
      * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
-    
+
     public function update($id, Request $request)
     {
         $product = Product::find($id);
@@ -136,7 +138,7 @@ class ProductController extends Controller
         $product->descripcion = $request->descripcion;
         $product->marca = $request->marca;
         $product->client_id = $request->client_id;
-        
+
 
 
         $product->disabled = ($request->disabled == "on")?1:0;
@@ -145,7 +147,7 @@ class ProductController extends Controller
         $product->save();
         return redirect()->route('products.index')
                             ->with('success','Product Updated successfully');
-        
+
     }
 
     /**

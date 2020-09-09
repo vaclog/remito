@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Customer;
 use App\Client;
 use Auth;
-
+use Illuminate\Support\Arr;
 
 use Illuminate\Http\Request;
 use App\Http\Resources\CustomerCollection;
@@ -24,17 +24,17 @@ class CustomerController extends Controller
 
 
         $customers = Customer::orderBy('nombre','ASC');
-        
+
         if( $request->buscar){
             $customers = $customers->where('nombre', 'LIKE', '%'.$request->buscar.'%');
             $customers = $customers->orWhere('calle', 'LIKE', '%'.$request->buscar.'%');
             $customers = $customers->orWhere('codigo', 'LIKE', '%'.$request->buscar.'%');
         }
-        
+
         $customers = $customers->paginate(20);
         return view('admin.customers.index',compact('customers'))
                 ->with('i', ($request->input('page', 1) - 1) * 20);
-        
+
     }
 
 
@@ -51,8 +51,8 @@ class CustomerController extends Controller
         $clients = Client::select('id', 'razon_social')->where('disabled', 0)
         ->orderBy('razon_social')->get();
 
-        $clients = 
-        array_pluck($clients, 'razon_social', 'id');
+        $clients =
+        Arr::pluck($clients, 'razon_social', 'id');
         return view('admin.customers.create',compact('clients'));
     }
 
@@ -93,12 +93,12 @@ class CustomerController extends Controller
 
             'disabled' => 0
           ]);
-    
+
           $customer->audit_created_by = Auth::user()->email;
-    
-    
+
+
           $customer->save();
-    
+
           return redirect()->route('customers.index')
                             ->with('success','Customer created successfully');
     }
@@ -127,8 +127,8 @@ class CustomerController extends Controller
         $clients = Client::select('id', 'razon_social')->where('disabled', 0)
                     ->orderBy('razon_social')->get();
 
-        $clients = 
-        array_pluck($clients, 'razon_social', 'id');
+        $clients =
+        Arr::pluck($clients, 'razon_social', 'id');
         //return response()->json($client);
         return view('admin.customers.edit',compact('customer', 'clients'));
     }
@@ -140,7 +140,7 @@ class CustomerController extends Controller
      * @param  \App\customer  $customer
      * @return \Illuminate\Http\Response
      */
-    
+
     public function update($id, Request $request)
     {
 
@@ -163,7 +163,7 @@ class CustomerController extends Controller
                 'codigo_valkimia'    => 'required|unique:customers,codigo_valkimia',
                 ]);
         }
-        
+
         $customer = Customer::find($id);
         //$client->update($request->all());
         $customer->codigo = $request->codigo;
@@ -176,7 +176,7 @@ class CustomerController extends Controller
 
         $customer->provincia = $request->provincia;
         $customer->client_id = $request->client_id;
-        
+
 
 
         $customer->disabled = ($request->disabled == "on")?1:0;
@@ -185,7 +185,7 @@ class CustomerController extends Controller
         $customer->save();
         return redirect()->route('customers.index')
                             ->with('success','customer Updated successfully');
-        
+
     }
 
 
