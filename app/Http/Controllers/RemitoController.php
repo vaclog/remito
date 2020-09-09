@@ -61,9 +61,16 @@ class RemitoController extends Controller
                  *  Para Orien se debe eliminar el String OEP o OEI del pedido
                  *
                  */
+                if ($remito->client_id != 4){
+                    $tipo = substr($item['pedido'], 0, 3);
+                    $pedido = substr($item['pedido'], 3, strlen($item['pedido'])); // TODO: Solo guardar nuemero sin el OEP o OEI
+                }
+                else {
+                    $tipo = substr($item['pedido'], 0, 4);
+                    $pedido = substr($item['pedido'], 4, strlen($item['pedido'])); // TODO: Solo guardar nuemero sin el OEEL
+                }
 
-                 $tipo = substr($item['pedido'], 0, 3);
-                $pedido = substr($item['pedido'], 3, strlen($item['pedido'])); // TODO: Solo guardar nuemero sin el OEP o OEI
+
 
                 $articulo = new RemitoArticulo([
                     'codigo' => $item['codigo'],

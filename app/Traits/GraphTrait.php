@@ -25,7 +25,7 @@ trait GraphTrait
     private $_RepositoryId;
     private $_RootId;
 
-
+    private $remito_cliente_id;
 
     public function __construct()
     {
@@ -45,6 +45,8 @@ trait GraphTrait
 
         $graph = $this->graphClient;
 
+        $this->remito_cliente_id = $remito->client_id;
+
         $this->_UserId = $this->_getUserId($graph);
 
         $this->_RootMasterId = $this->_getRootMasterId($graph);
@@ -56,12 +58,20 @@ trait GraphTrait
 
 
         $numero_remito = str_pad( $remito->sucursal, 4, "0", STR_PAD_LEFT).'-'.str_pad( $remito->numero_remito, 8, "0", STR_PAD_LEFT);
-        $filename  = 'RT-ORIEN-'.$numero_remito.'.csv';
+        if ( $this->remito_cliente_id == 2){
+            $filename  = 'RT-ORIEN-'.$numero_remito.'.csv';
+            $empresa = 'EMP00';
+        }
+        else {
+            $filename  = 'RT-ELCA-'.$numero_remito.'.csv';
+            $empresa = 'EMP01';
 
+        }
 
 
         $registro = '';
         $separador = ';';
+
         foreach ($remito->articulos as $key => $art) {
             # code...
             /** TODO a pedido de orien hay que separar los tipos de ordenes de venta OEP y OEI
@@ -75,7 +85,7 @@ trait GraphTrait
                             $separador.
                             date_format(date_create($remito->fecha_remito), 'Ymd').
                             $separador.
-                            'EMP00'.
+                            $empresa.
                             $separador.
                             'FC|'.$tipo_nota_venta.
                             $separador.
@@ -144,7 +154,13 @@ trait GraphTrait
     }
 
     public function _getRepositoryId($graph, $RootMasterId){
-        $pages = $graph->createCollectionRequest('GET', '/drives/'.$RootMasterId.'/root:/'.env('ONEDRIVE_REPOSITORY_NAME').':/')
+
+        $repository = env('ONEDRIVE_REPOSITORY_NAME');
+        if ( $this->remito_cliente_id == 4) { //ELCA
+            $repository = env('ONEDRIVE_REPOSITORY_NAME_ELCA');
+        }
+
+        $pages = $graph->createCollectionRequest('GET', '/drives/'.$RootMasterId.'/root:/'.$repository.':/')
         ->setReturnType(Model\DriveItem::class)
         ->setPageSize(1);
 

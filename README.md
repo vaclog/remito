@@ -21,5 +21,5 @@ el MPDF
 
 que se subio al github con un cambio para que utilize el PHPOFFICE_TEMP_DIR.
 
-
+se agrego al env un path para el usuario ELCA, para el caso del remito generado para OneDrive
 
