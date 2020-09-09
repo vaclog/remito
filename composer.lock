@@ -247,7 +247,9 @@
                     "type": "tidelift"
                 }
             ],
+
             "time": "2020-05-29T15:13:26+00:00"
+
         },
         {
             "name": "doctrine/lexer",
@@ -308,6 +310,20 @@
                 "lexer",
                 "parser",
                 "php"
+            ],
+            "funding": [
+                {
+                    "url": "https://www.doctrine-project.org/sponsorship.html",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://www.patreon.com/phpdoctrine",
+                    "type": "patreon"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/doctrine%2Flexer",
+                    "type": "tidelift"
+                }
             ],
             "time": "2020-05-25T17:44:05+00:00"
         },
@@ -1295,6 +1311,7 @@
                     "type": "patreon"
                 }
             ],
+
             "time": "2020-08-20T13:22:28+00:00"
         },
         {
@@ -1391,6 +1408,7 @@
                 }
             ],
             "time": "2020-08-18T01:19:12+00:00"
+
         },
         {
             "name": "league/event",
@@ -1531,7 +1549,10 @@
                     "type": "other"
                 }
             ],
+
             "time": "2020-08-23T07:39:11+00:00"
+
+
         },
         {
             "name": "league/mime-type-detection",
@@ -1634,12 +1655,13 @@
                     "role": "Developer",
                     "email": "hello@alexbilbie.com",
                     "homepage": "http://www.alexbilbie.com"
+
                 },
                 {
                     "name": "Andy Millington",
-                    "role": "Developer",
                     "email": "andrew@noexceptions.io",
-                    "homepage": "https://www.noexceptions.io"
+                    "homepage": "https://www.noexceptions.io",
+                    "role": "Developer"
                 }
             ],
             "description": "A lightweight and powerful OAuth 2.0 authorization and resource server library with support for all the core specification grants. This library will allow you to secure your API with OAuth and allow your applications users to approve apps that want to access their data from your API.",
@@ -2026,7 +2048,9 @@
                     "type": "tidelift"
                 }
             ],
+
             "time": "2020-07-23T08:41:23+00:00"
+
         },
         {
             "name": "mpdf/mpdf",
@@ -2101,7 +2125,9 @@
                     "type": "custom"
                 }
             ],
+
             "time": "2020-07-15T09:48:00+00:00"
+
         },
         {
             "name": "myclabs/deep-copy",
@@ -2290,7 +2316,9 @@
                     "type": "tidelift"
                 }
             ],
+
             "time": "2020-09-04T13:11:37+00:00"
+
         },
         {
             "name": "nikic/php-parser",
@@ -2875,7 +2903,9 @@
                     "type": "tidelift"
                 }
             ],
+
             "time": "2020-07-08T09:08:33+00:00"
+
         },
         {
             "name": "psr/container",
@@ -3482,7 +3512,9 @@
                     "type": "tidelift"
                 }
             ],
+
             "time": "2020-08-27T06:55:47+00:00"
+
         },
         {
             "name": "spatie/laravel-permission",
@@ -3709,7 +3741,9 @@
                     "type": "tidelift"
                 }
             ],
+
             "time": "2020-09-02T07:07:21+00:00"
+
         },
         {
             "name": "symfony/css-selector",
@@ -3776,7 +3810,9 @@
                     "type": "tidelift"
                 }
             ],
+
             "time": "2020-05-20T17:43:50+00:00"
+
         },
         {
             "name": "symfony/debug",
@@ -4141,7 +4177,9 @@
                     "type": "tidelift"
                 }
             ],
+
             "time": "2020-08-17T09:56:45+00:00"
+
         },
         {
             "name": "symfony/http-foundation",
@@ -4545,7 +4583,9 @@
                     "type": "tidelift"
                 }
             ],
+
             "time": "2020-07-14T12:35:20+00:00"
+
         },
         {
             "name": "symfony/polyfill-intl-idn",
@@ -4630,7 +4670,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-08-04T06:02:08+00:00"
+       "time": "2020-08-04T06:02:08+00:00"
         },
         {
             "name": "symfony/polyfill-intl-normalizer",
@@ -4712,6 +4752,7 @@
                 }
             ],
             "time": "2020-07-14T12:35:20+00:00"
+
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -4789,6 +4830,7 @@
                 }
             ],
             "time": "2020-07-14T12:35:20+00:00"
+
         },
         {
             "name": "symfony/polyfill-php70",
@@ -4866,6 +4908,7 @@
                 }
             ],
             "time": "2020-07-14T12:35:20+00:00"
+
         },
         {
             "name": "symfony/polyfill-php72",
@@ -5157,7 +5200,9 @@
                     "type": "tidelift"
                 }
             ],
+
             "time": "2020-07-23T08:31:43+00:00"
+
         },
         {
             "name": "symfony/psr-http-message-bridge",
@@ -5312,7 +5357,9 @@
                     "type": "tidelift"
                 }
             ],
+
             "time": "2020-08-10T07:27:51+00:00"
+
         },
         {
             "name": "symfony/service-contracts",
@@ -5478,7 +5525,9 @@
                     "type": "tidelift"
                 }
             ],
+
             "time": "2020-08-17T09:56:45+00:00"
+
         },
         {
             "name": "symfony/translation-contracts",
@@ -5766,7 +5815,9 @@
                     "type": "tidelift"
                 }
             ],
+
             "time": "2020-07-14T19:04:52+00:00"
+
         },
         {
             "name": "zendframework/zend-diactoros",
@@ -5911,7 +5962,9 @@
                     "type": "github"
                 }
             ],
+
             "time": "2020-08-30T07:08:17+00:00"
+
         },
         {
             "name": "beyondcode/laravel-dump-server",
