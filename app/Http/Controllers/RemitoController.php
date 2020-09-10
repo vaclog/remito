@@ -149,7 +149,11 @@ class RemitoController extends Controller
                 ->with('customer', 'articulos', 'client')->first();
         $data = $remito;
 
-        return $this->toExcelOrien($data);
+        if ($remito->client_id == 2){
+            return $this->toExcelOrien($data);
+        } else if ( $remito->client_id == 4 ){
+            return $this->toExcelELCA($data);
+        }
 
     }
 

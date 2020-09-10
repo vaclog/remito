@@ -443,6 +443,68 @@ trait ExcelTrait
 
     }
 
+    public function toExcelELCA($remito){
+        $sp = new Spreadsheet();
+
+        $numero_remito = str_pad( $remito->sucursal, 4, "0", STR_PAD_LEFT).'-'.str_pad( $remito->numero_remito, 8, "0", STR_PAD_LEFT);
+        $sp->getProperties()
+           ->setCreator('VACLOG WD')
+           ->setTitle('RT-ORIEN-'.$numero_remito);
+
+        $sp->setActiveSheetIndex(0);
+        $i = 1;
+        foreach ($remito->articulos as $key => $art) {
+            # code...
+            $registro = [  $numero_remito,
+                            date_format(date_create($remito->fecha_remito), 'Ymd'),
+                            'EMP01', 'FC|'.$art->tipo_nota_venta,
+                            $art->referencia,
+                            $remito->customer->codigo,
+                            '1',
+                            $art->codigo,
+                            $art->cantidad];
+
+            $sp->getActiveSheet()->fromArray($registro ,null, 'A'.$i, true);
+            $i++;
+        }
+
+
+
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Csv($sp);
+        $writer->setDelimiter(';');
+        $writer->setEnclosure('');
+        $writer->setLineEnding("\r\n");
+        $writer->setSheetIndex(0);
+        $archivo = 'RT-ELCA-'.$numero_remito.'.csv';
+        //$this->setHeaderCsv($archivo);
+        //$writer->save('php://output');
+
+
+        // return response((string) $writer->save('php://output'), 200, [
+        //     'Content-Type' => 'text/csv',
+        //     'Content-Transfer-Encoding' => 'binary',
+        //     'Content-Disposition' => 'attachment; filename="'.$archivo.'"',
+        // ]);
+
+
+        $response =  new StreamedResponse(
+            function () use ($writer) {
+                $writer->save('php://output');
+            }
+        );
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Disposition', 'attachment;filename="'.$archivo.'"');
+        $response->headers->set('Cache-Control','max-age=0');
+        return $response;
+
+
+
+
+
+//        $writer->save($archivo);
+
+    }
+
     public function test1($remito){
         $mPDF = new NewPdf(
             [
