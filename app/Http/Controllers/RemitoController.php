@@ -106,7 +106,7 @@ class RemitoController extends Controller
     public function show(Request $request, $id){
 
         $remito = Remito::where('id', $id)->with('articulos')->first();
-
+        //return response()->json($remito);
         return view('show', compact('remito'));
 
 
