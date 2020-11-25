@@ -64,12 +64,13 @@
         </style>
     </head>
     <body>
-        
+
         <div id="app" class="flex-center position-ref full-height">
             @if (Route::has('login'))
                 <div class="top-right links">
                     @auth
-                        <a href="{{ url('/home') }}">Home</a>
+                        <a href="{{ url('/home') }}">Remitos</a>
+                        <a href="{{ url('/plantillabase') }}">Prefacturacion</a>
                     @else
                         <a href="{{ route('login') }}">Login</a>
 
@@ -81,7 +82,7 @@
             @endif
 
             <div class="content">
-        
+
                 <div class="row">
                     </div class="col text-rigth" >
                         <img src="/assets/VACLOG.jpg" alt="VACLOG GROUP">
@@ -92,12 +93,12 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        
-                    </div>  
-                </div>
-                
 
-                
+                    </div>
+                </div>
+
+
+
             </div>
         </div>
     </body>
