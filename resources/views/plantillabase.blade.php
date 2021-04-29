@@ -28,7 +28,10 @@
             </div>
         </div>
         <div class="topnav">
-
+            @if (Route::currentRouteName() != 'home')
+                <a href="{{route('home')}}">Home</a>
+                <a href="{{url()->previous()}}">Volver</a>
+            @else
                 <a href="{{route('resumen')}}">Resumen</a>
                 <a href="{{route('palletin')}}">Pallet-In</a>
                 <a href="{{route('palletout')}}">Pallet-Out</a>
@@ -36,7 +39,7 @@
                 <a href="{{route('almacenaje')}}">Almacenaje</a>
                 <a href="{{route('costos')}}">Costos</a>
 
-
+            @endif
         </div>
         <div class="container-fluid pt-5">
             @yield('areatrabajo')

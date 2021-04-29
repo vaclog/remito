@@ -251,7 +251,7 @@
                             w2ui['grid'].set(controlrec, {Referencia:Valor});
                         }
                         RecalculaGrid();
-                        w2ui['grid'].save();
+                        //w2ui['grid'].save();
                     }
                 }
             });
@@ -274,16 +274,17 @@
                         switch(c)
                         {
                             case 5:
-                                SumaCant+=value;
+                                SumaCant+=parseFloat(value);
+                                //console.log('############## ' + value);
                                 break;
                             case 6:
-                                SumaPalletin+=value;
+                                SumaPalletin+=parseFloat(value);
                                 break;
                             case 7:
-                                SumaPrecio+=value;
+                                SumaPrecio+=parseFloat(value);
                                 break;
                             case 8:
-                                SumaPiking+=value;
+                                SumaPiking+=parseFloat(value);
                                 break;
                         }
 
@@ -292,11 +293,11 @@
                     c+=1;
                 }
             }
-
-            $("#sumcant").val(SumaCant);
-            $("#sumpalletin").val(SumaPalletin.toFixed(2));
-            $("#sumprecio").val(SumaPrecio.toFixed(2));
-            $("#sumpiking").val(SumaPiking.toFixed(2));
+            //console.log('>>>>>>>>>>>>>>>>>>>>>>' + SumaCant);
+            $("#sumcant").val(Number(SumaCant).toFixed(2));
+            $("#sumpalletin").val(Number(SumaPalletin).toFixed(2));
+            $("#sumprecio").val(Number(SumaPrecio).toFixed(2));
+            $("#sumpiking").val(Number(SumaPiking).toFixed(2));
         }
 
         function PDF()

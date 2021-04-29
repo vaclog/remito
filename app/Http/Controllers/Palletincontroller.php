@@ -13,7 +13,7 @@ class Palletincontroller extends Controller
     //Inicio
     public function Formulario()
     {
-        $clientes = DB::table('clients')->where('disabled', 0)->select('id','razon_social')->orderByRaw('razon_social asc')->get();
+        $clientes = DB::table('clients')->select('id','razon_social')->orderByRaw('razon_social asc')->get();
         $tipoop=array(1=>'Nuevo',2=>'Devolución');
         return view('palletin', compact('clientes','tipoop'));
     }

@@ -13,8 +13,7 @@ class AlmacenajeController extends Controller
     //Formulario de filtro de fechas
     public function Formulario()
     {
-        $clientes = DB::table('clients')->where('disabled', 0)->
-                    select('id','razon_social')->orderByRaw('razon_social asc')->get();
+        $clientes = DB::table('clients')->select('id','razon_social')->orderByRaw('razon_social asc')->get();
         return view('almacenaje', compact('clientes'));
     }
 

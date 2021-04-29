@@ -7,14 +7,13 @@ use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Collection;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\Storage;
-use App\Client;
 
 class PalletOutController extends Controller
 {
     public function Formulario()
     {
-        $clientes = DB::table('clients')->where('disabled', 0)->select('id','razon_social')->orderByRaw('razon_social asc')->get();
-        $tipoop=array(1=>'Nuevo',2=>'Devolución');
+        $clientes = DB::table('clients')->select('id','razon_social')->orderByRaw('razon_social asc')->get();
+        //$tipoop=array(1=>'Nuevo',2=>'Devolución');
         return view('palletout', compact('clientes','tipoop'));
     }
 

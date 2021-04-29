@@ -207,6 +207,7 @@
                     alert('Error al ejecutar la transacción - ' + resultado.Msg);
                 }else{
                     window.open(resultado.Path, '_blank');
+
                     if(Modo==2)
                     {
                         location.href = "{{route('home')}}";

@@ -11,9 +11,7 @@ class resumenController extends Controller
 {
     public function Formulario()
     {
-        $clientes = DB::table('clients')->select('id','razon_social')
-                    ->where('disabled', 0)
-                    ->orderByRaw('razon_social asc')->get();
+        $clientes = DB::table('clients')->select('id','razon_social')->orderByRaw('razon_social asc')->get();
         $tipoop=array(1=>'Nuevo',2=>'Devolución');
         return view('resumen', compact('clientes','tipoop'));
     }
