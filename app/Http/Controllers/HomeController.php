@@ -39,26 +39,32 @@ class HomeController extends Controller
         }
 
 
-        $remitos = Remito::select('remitos.*')->where('remitos.client_id', $client_selected)
+        $remitos = Remito::select('remitos.*')
+                        ->where('remitos.client_id', $client_selected)
                         ->join('customers','customer_id', 'customers.id');
 
-        $busqueda = $request->input('q');
-        if( $busqueda!= ''){
-            $remitos = $remitos->where('referencia', 'LIKE', '%'.$busqueda.'%');
-            $remitos = $remitos->orWhere('remitos.calle', 'LIKE', '%'.$busqueda.'%');
-            $remitos = $remitos->orWhere('customers.nombre','LIKE', '%'.$busqueda.'%');
-            $remitos = $remitos->orWhere('remitos.numero_remito', 'LIKE', '%'.$busqueda.'%');
+        $busqueda = '%'.$request->input('q').'%';
+        if( $busqueda!= '%%'){
+            $remitos->where(function($query) use ($busqueda){
+                $query->orWhere('referencia', 'LIKE', $busqueda);
+                 $query->orWhere('remitos.calle', 'LIKE', $busqueda);
+                 $query->orWhere('customers.nombre','LIKE', $busqueda);
+                 $query->orWhere('remitos.numero_remito', 'LIKE', $busqueda);
+            });
+
         }
 
         $remitos = $remitos->orderBy('remitos.created_at', 'desc')
                     ->with('customer');
 
+        // $remitos = $remitos->toSql();
+        // dd($remitos);
         $remitos = $remitos->paginate(20)
-                        ->appends([ 'q' => $busqueda,
+                        ->appends([ 'q' => $request->input('q'),
                                 'clients' => $clients,
                                 'client_selected' => $client_selected])
                         ;
-        $q = $busqueda;
+        $q =  $request->input('q');
         return view('index', compact('remitos', 'clients', 'client_selected', 'q'))->withQuery($q)
                 ->with('i', ($request->input('page', 1) - 1) * 20);
 

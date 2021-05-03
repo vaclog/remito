@@ -41,8 +41,9 @@
 
     </div>
     <div class="container">
-        <form action="/search" method="POST" role="search" id="form_search">
+        <form action="/search?client_selected={{ $client_selected }}" method="POST" role="search" id="form_search">
             {{ csrf_field() }}
+
             <div class="input-group">
                 <input type="text" class="form-control" name="q" id="q" value="{{ (isset($q)) ? $q: ''}}"
                     placeholder="Buscar"> <span class="input-group-btn">
