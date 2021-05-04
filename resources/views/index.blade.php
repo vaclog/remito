@@ -83,12 +83,12 @@
         </thead>
         <tbody>
                 @foreach ($remitos as $key => $remito)
-                @if ($remito->disabled === 0)
+                @if ($remito->disabled == 0)
                 <tr>
                 @else
                 <tr style="background-color: pink">
                 @endif
-                    @if ( $remito->disabled === 0)
+                    @if ( $remito->disabled == 0)
                     <td class="text-center">{{ str_pad( $remito->sucursal, 4, "0", STR_PAD_LEFT).'-'.str_pad( $remito->numero_remito, 8, "0", STR_PAD_LEFT)}}</td>
                     @else
                     <td class="text-center">{{ str_pad( $remito->sucursal, 4, "0", STR_PAD_LEFT).'-'.str_pad( $remito->numero_remito, 8, "0", STR_PAD_LEFT)}}</br><strong class="text-danger">ANULADO</strong></td>

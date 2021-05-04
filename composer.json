@@ -13,17 +13,17 @@
         "fideloper/proxy": "^4.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "krizalys/onedrive-php-sdk": "^3.1.0",
-
         "laravel/framework": "^8.0",
-        "laravel/ui": "^3.0",
         "laravel/passport": "^10.0",
         "laravel/tinker": "^2.0",
+        "laravel/ui": "^3.0",
         "laravelcollective/html": "^6.0",
         "laravelista/lumen-vendor-publish": "^8.0",
         "mpdf/mpdf": "^8.0",
         "nesbot/carbon": "^2.24",
         "owen-it/laravel-auditing": "^10.0",
         "phpoffice/phpspreadsheet": "^1.8",
+        "phpseclib/phpseclib": "^3.0",
         "spatie/laravel-permission": "^3.0"
     },
     "require-dev": {
