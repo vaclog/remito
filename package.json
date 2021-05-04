@@ -18,7 +18,9 @@
     "vue-stepper-component": "^1.0.0",
     "vue-the-mask": "^0.11.1",
     "vuetify": "^2.0.0",
-    "vuex": "^3.1.1"
+    "vuex": "^3.1.1",
+    "y18n": ">=4.0.1",
+    "node-notifier": ">=8.0.1"
   },
   "devDependencies": {
     "@mdi/font": "^3.8.95",
