@@ -80,9 +80,9 @@
                             return html;
                         }
                     },
-                    { field: 'cant_recibida_unidad', caption: 'Cantidad', size: '120px', sortable: true, resizable: true, style: 'text-align: right'},
+                    { field: 'cant_recibida_unidad', caption: 'Cantidad', size: '120px', sortable: true, resizable: true, render:'number',style: 'text-align: right'},
                     { field: 'CantidadPalletIN', caption: '<b>Pallet In</b>', size: '90px', sortable: true, resizable: true,render:'number',editable:{type: 'int'}, style: 'text-align: right'},
-                    { field: 'PrecioPalletIN', caption: 'Precio Pallet', size: '110px', sortable: true, resizable: true,render:'number',style:'text-align: right'},
+                    { field: 'PrecioPalletIN', caption: 'Precio Pallet', size: '110px', sortable: true, resizable: true,style:'text-align: right'},
                     { field: 'PickingDev', caption: 'Picking Dev', size: '90px', sortable: true, resizable: true, style: 'text-align: right'}
                 ],
                 records:<?php echo($DSRemitosJson);?>,

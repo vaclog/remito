@@ -13,7 +13,7 @@ class PickingController extends Controller
     //Formulario de filtro de fechas
     public function Formulario()
     {
-        $clientes = DB::table('clients')->select('id','razon_social')->orderByRaw('razon_social asc')->get();
+        $clientes = DB::table('clients')->select('vkm_cliente_id as id','razon_social')->orderByRaw('razon_social asc')->get();
         $tipoop=array(1=>'Nuevo',2=>'Devolución');
         return view('picking', compact('clientes','tipoop'));
     }
@@ -69,7 +69,7 @@ class PickingController extends Controller
         }
 
         #Nombre cliente
-        $DS_RazonSocial = DB::table('clients')->select('razon_social')->whereRaw("id=$request->cbo_clientes")->pluck('razon_social');
+        $DS_RazonSocial = DB::table('clients')->select('razon_social')->whereRaw("vkm_cliente_id=$request->cbo_clientes")->pluck('razon_social');
         $request->session()->put('RazonSocial', $DS_RazonSocial[0]);
         $request->session()->put('IDCliente', $request->cbo_clientes);
 

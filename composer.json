@@ -23,6 +23,7 @@
         "nesbot/carbon": "^2.24",
         "owen-it/laravel-auditing": "^10.0",
         "phpoffice/phpspreadsheet": "^1.8",
+
         "phpseclib/phpseclib": "^3.0",
         "spatie/laravel-permission": "^3.0"
     },

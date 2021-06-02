@@ -120,16 +120,13 @@
               //beforeSend: function(){alert(controlupdate);},
               success: function(resultado)
               {
-                RecalculaBultos();
-
-                  /*  if(resultado.Error!=0)
+                    if(resultado.Error!=0)
                     {
-                        alert('
-                        Error al ejecutar la transacción');
+                        alert('Error al ejecutar la transacción');
                     }else{
                        // w2ui['grid'].set(controlrec, {Referencia:Valor});
                        RecalculaBultos();
-                    }*/
+                    }
                 }
             });
         }

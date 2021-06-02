@@ -19,10 +19,11 @@
     <div class="col-3"><h4>Cliente: {{ Session('RazonSocial') }}</h4></div>
     <div class="col-3"><h4>Mes/Año: {{ $_DatosFecha }}</h4></div>
 </div>
-
+<!--
 <div class="row">
     <div class="col-12 pt-1 pb-1"><h5>Validación de datos:</h5></div>
 </div>
+
 <div class="row">
     <div class="col-3">
         @if($_ErrorPI==1)
@@ -53,6 +54,7 @@
         @endif
     </div>
 </div>
+-->
 
 <div class="row">
     <div class="col-4 mt-5">
@@ -64,13 +66,15 @@
         <div id="grid" style="width: 100%; height: 350px;"></div>
     </div>
     <div class="col-3 mr-5">
-        <button type="button" id="pdfprevio" name="pdfprevio" class="btn btn-warning" onclick="PdfResumen(1);">Generar PDF previo</button>
+        <a href="{{ route('ajax.pdfresumen') }}?Accion=1&mes={{$F_Mes}}&anio={{$F_Anio}}" class="btn btn-warning btn-lg active" role="button" aria-pressed="true">Generar XLS previo</a>
+        <!--<button type="button" id="pdfprevio" name="pdfprevio" class="btn btn-warning" onclick="PdfResumen(1);">Generar PDF previo</button>-->
     </div>
     <div class="col-3">
-        <button type="button" id="cerrar" name="cerrar" class="btn btn-success" onclick="PdfResumen(2);"
+        <!--<button type="button" id="cerrar" name="cerrar" class="btn btn-success" onclick="PdfResumen(2);"-->
+        <a href="{{ route('ajax.pdfresumen') }}?Accion=2&mes={{$F_Mes}}&anio={{$F_Anio}}" class="btn btn-success btn-lg active" role="button" aria-pressed="true"
         @if($Estado!=0)
             disabled
-        @endif >Cerrar resumen y generar PDF</button>
+        @endif >Cerrar resumen y generar XLS</a>
     </div>
 </div>
 
@@ -207,7 +211,6 @@
                     alert('Error al ejecutar la transacción - ' + resultado.Msg);
                 }else{
                     window.open(resultado.Path, '_blank');
-
                     if(Modo==2)
                     {
                         location.href = "{{route('home')}}";
