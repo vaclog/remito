@@ -13,7 +13,7 @@ class AlmacenajeController extends Controller
     //Formulario de filtro de fechas
     public function Formulario()
     {
-        $clientes = DB::table('clients')->select('id','razon_social')->orderByRaw('razon_social asc')->get();
+        $clientes = DB::table('clients')->select('vkm_cliente_id as id','razon_social')->orderByRaw('razon_social asc')->get();
         return view('almacenaje', compact('clientes'));
     }
 
@@ -43,7 +43,7 @@ class AlmacenajeController extends Controller
 
 
         #Nombre cliente
-        $DS_RazonSocial = DB::table('clients')->select('razon_social')->whereRaw("id=$request->cbo_clientes")->pluck('razon_social');
+        $DS_RazonSocial = DB::table('clients')->select('razon_social')->whereRaw("vkm_cliente_id=$request->cbo_clientes")->pluck('razon_social');
         $request->session()->put('RazonSocial', $DS_RazonSocial[0]);
         $request->session()->put('IDCliente', $request->cbo_clientes);
         $ID_Cliente=$request->cbo_clientes;
@@ -55,6 +55,7 @@ class AlmacenajeController extends Controller
         #Sumatoria
         $SumStockMaximo=0;
         $StockMaximo=0;
+        $PrecioCostos=0;
         foreach($DSAlmacenaje as $sumas)
         {
             $PrecioCostos=$sumas->Precio;
@@ -87,7 +88,9 @@ class AlmacenajeController extends Controller
 
         try{
             #Llama al SP
-            $DS_AlmacenajeGrabar = DB::select("call SP_AlmacenajeGrabar(?,?,?)",[$request->idrec,$request->col,$request->valor]);
+            $DS_AlmacenajeGrabar = DB::select("call SP_AlmacenajeGrabar(?,?,?)",[$request->idrec,
+            $request->col,
+            $request->valor]);
             $_Error=0;
             foreach($DS_AlmacenajeGrabar as $salida)
             {

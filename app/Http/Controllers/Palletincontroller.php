@@ -13,7 +13,7 @@ class Palletincontroller extends Controller
     //Inicio
     public function Formulario()
     {
-        $clientes = DB::table('clients')->select('id','razon_social')->orderByRaw('razon_social asc')->get();
+        $clientes = DB::table('clients')->select('vkm_cliente_id as id','razon_social')->orderByRaw('razon_social asc')->get();
         $tipoop=array(1=>'Nuevo',2=>'Devolución');
         return view('palletin', compact('clientes','tipoop'));
     }
@@ -55,7 +55,7 @@ class Palletincontroller extends Controller
         }
 
         #Nombre cliente
-        $DS_RazonSocial = DB::table('clients')->select('razon_social')->whereRaw("id=$request->cbo_clientes")->pluck('razon_social');
+        $DS_RazonSocial = DB::table('clients')->select('razon_social')->whereRaw("vkm_cliente_id=$request->cbo_clientes")->pluck('razon_social');
         $request->session()->put('RazonSocial', $DS_RazonSocial[0]);
         $request->session()->put('IDCliente', $request->cbo_clientes);
 
@@ -96,7 +96,11 @@ class Palletincontroller extends Controller
 
         try{
             #Llama al SP
-            $DS_sp_costos = DB::select("call sp_palletin(?,?,?,?)",[$request->idrec,$request->session()->get('IDCliente'),$request->valor,$request->tipo]);
+            $DS_sp_costos = DB::select("call sp_palletin(?, ?, ?, ?)",
+                          [$request->idrec,
+                           $request->session()->get('IDCliente'),
+                           $request->valor,
+                           $request->tipo]);
             $_Error=0;
             foreach($DS_sp_costos as $salida)
             {
@@ -106,6 +110,7 @@ class Palletincontroller extends Controller
 
         }catch(\Exception $e)
         {
+            dd($e);
             $_Error=1;
         }
 

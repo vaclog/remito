@@ -12,9 +12,9 @@ class PalletOutController extends Controller
 {
     public function Formulario()
     {
-        $clientes = DB::table('clients')->select('id','razon_social')->orderByRaw('razon_social asc')->get();
+        $clientes = DB::table('clients')->select('vkm_cliente_id as id','razon_social')->orderByRaw('razon_social asc')->get();
         //$tipoop=array(1=>'Nuevo',2=>'Devolución');
-        return view('palletout', compact('clientes','tipoop'));
+        return view('palletout', compact('clientes'));
     }
 
 
@@ -61,7 +61,7 @@ class PalletOutController extends Controller
         }
 
         #Nombre cliente
-        $DS_RazonSocial = DB::table('clients')->select('razon_social')->whereRaw("id=$request->cbo_clientes")->pluck('razon_social');
+        $DS_RazonSocial = DB::table('clients')->select('razon_social')->whereRaw("vkm_cliente_id=$request->cbo_clientes")->pluck('razon_social');
         $request->session()->put('RazonSocial', $DS_RazonSocial[0]);
         $request->session()->put('IDCliente', $request->cbo_clientes);
 
@@ -89,10 +89,26 @@ class PalletOutController extends Controller
 
         try{
             #Llama al SP
-            $DS_sp_palletout = DB::select("call sp_palletout(?,?,?)",[$request->idrec,$request->session()->get('IDCliente'),$request->valor]);
+            $DS_sp_palletout = DB::statement("CALL sp_palletout(?,?,?)", [ $request->idrec,
+                                                                        $request->session()->get('IDCliente'),
+                                                                        $request->valor]);
+
+
+            // $DS_sp_palletout = DB::update( 'UPDATE vkm_salidas SET
+            //                                         BultoRemito = ?
+            //                                   WHERE id = ?
+            //                                     AND cliente_id = ? ',
+            // [
+            //     $request->valor,
+            //     $request->idrec,
+            //     $request->session()->get('IDCliente')
+
+
+            //  ]);
             $_Error=0;
         }catch(\Exception $e)
         {
+            dd($e);
             $_Error=1;
         }
 

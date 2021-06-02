@@ -15,7 +15,6 @@ Route::get('/', function () {
 });
 Auth::routes(['verify' => true]);
 
-
 Route::group(
     ['middleware' => ['auth:web']],
     function () {
@@ -63,47 +62,58 @@ Route::group(
             return view('plantillabase');
         })->name('planillabase');
 
-        #Palets-In llamado a su controlador para el formulario inicial
-        Route::get('palletin','Palletincontroller@Formulario')->name('palletin');
+#Articulos
+Route::get('articuloslista','ArticulosController@ArticulosLista')->name('articuloslista');
+Route::get('articulos','ArticulosController@Formulario')->name('articulos');
+Route::post('articulos','ArticulosController@ValidarFormulario')->name('articulos.filtroform');
+Route::post('articulosup','ArticulosController@SP_UP')->name('articulosup');
 
-        #Ruta para el envio del formulario de Palletin (formulario de seleccion de clinete)
-        Route::post('palletin','Palletincontroller@ValidarFormulario')->name('palletin.filtroform');
 
-        #Costos por clientes
-        Route::get('costos','CostosController@CargaInicial')->name('costos');
-        Route::post('costos','CostosController@CargaCliente')->name('Costos.CargaCliente');
-        Route::post('ajcostos','CostosController@UpdateCreate')->name('costosupdate');
+#Palets-In llamado a su controlador para el formulario inicial
+Route::get('palletin','Palletincontroller@Formulario')->name('palletin');
 
-        #Palletin AJAX
-        Route::post('ajpalletin','Palletincontroller@SP_Palletin')->name('palletinupdate');
+#Ruta para el envio del formulario de Palletin (formulario de seleccion de clinete)
+Route::post('palletin','Palletincontroller@ValidarFormulario')->name('palletin.filtroform');
 
-        #Pallet-OUT
-        Route::get('palletout','PalletOutController@Formulario')->name('palletout');
-        Route::post('palletout','PalletOutController@ValidarFormulario')->name('palletout.filtroform');
-        Route::post('ajpalletout','PalletOutController@SP_Palletout')->name('palletoutupdate');
+#Costos por clientes
+Route::get('costos','CostosController@CargaInicial')->name('costos');
+Route::post('costos','CostosController@CargaCliente')->name('Costos.CargaCliente');
+Route::post('ajcostos','CostosController@UpdateCreate')->name('costosupdate');
 
-        #Picking
-        Route::get('piking','PickingController@Formulario')->name('picking');
-        Route::post('picking','PickingController@ValidarFormulario')->name('picking.filtroform');
+#Palletin AJAX
+Route::post('ajpalletin','Palletincontroller@SP_Palletin')->name('palletinupdate');
 
-        #Almacenaje
-        Route::get('almacenaje','AlmacenajeController@Formulario')->name('almacenaje');
-        Route::post('almacenaje','AlmacenajeController@ValidarFormulario')->name('almacenaje.filtroform');
-        #...AJAX
-        Route::post('ajalmacenaje','AlmacenajeController@SP_AlmacenajeGrabar')->name('ajax.almacenaje');
+#Pallet-OUT
+Route::get('palletout','PalletOutController@Formulario')->name('palletout');
+Route::post('palletout','PalletOutController@ValidarFormulario')->name('palletout.filtroform');
+Route::post('ajpalletout','PalletOutController@SP_Palletout')->name('palletoutupdate');
 
-        #Resumen
-        Route::get('resumen','resumenController@Formulario')->name('resumen');
-        Route::post('resumen','resumenController@ValidarFormulario')->name('resumen.filtroform');
-        #...Ajax
-        Route::post('ajresumen','resumenController@SP_Grabar')->name('ajax.GrabaResumen');
-        Route::post('resumen/pdf','resumenController@GeneraPDF')->name('ajax.pdfresumen');
+#Picking
+Route::get('piking','PickingController@Formulario')->name('picking');
+Route::post('picking','PickingController@ValidarFormulario')->name('picking.filtroform');
 
-        #...PDF
-        Route::post('palletinpdf','Palletincontroller@GeneraPDF')->name('PDFPalletin');
-        Route::post('palletoutpdf','PalletOutController@GeneraPDF')->name('PDFPalletout');
-        Route::post('pickingdevpdf','PickingController@GeneraPDF')->name('PDFPickingdev');
-        Route::post('almacenajepdf','AlmacenajeController@GeneraPDF')->name('PDFAlmacenaje');
+#Almacenaje
+Route::get('almacenaje','AlmacenajeController@Formulario')->name('almacenaje');
+Route::post('almacenaje','AlmacenajeController@ValidarFormulario')->name('almacenaje.filtroform');
+#...AJAX
+Route::post('ajalmacenaje','AlmacenajeController@SP_AlmacenajeGrabar')->name('ajax.almacenaje');
 
+#Resumen
+Route::get('resumen','resumenController@Formulario')->name('resumen');
+Route::post('resumen','resumenController@ValidarFormulario')->name('resumen.filtroform');
+
+#...Ajax
+
+#*************************************************************************************************************************************************
+Route::post('ajresumen','resumenController@SP_Grabar')->name('ajax.GrabaResumen');
+Route::get('resumen/excel','resumenController@ExcelExport')->name('ajax.pdfresumen');
+
+#...PDF
+Route::post('palletinpdf','Palletincontroller@GeneraPDF')->name('PDFPalletin');
+Route::post('palletoutpdf','PalletOutController@GeneraPDF')->name('PDFPalletout');
+Route::post('pickingdevpdf','PickingController@GeneraPDF')->name('PDFPickingdev');
+Route::post('almacenajepdf','AlmacenajeController@GeneraPDF')->name('PDFAlmacenaje');
     }
 );
+
+

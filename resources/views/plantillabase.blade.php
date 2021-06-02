@@ -35,7 +35,7 @@
                 <a href="{{route('picking')}}">Picking</a>
                 <a href="{{route('almacenaje')}}">Almacenaje</a>
                 <a href="{{route('costos')}}">Costos</a>
-
+				<a href="{{route('articulos')}}">Artículos</a>
 
         </div>
         <div class="container-fluid pt-5">
