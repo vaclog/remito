@@ -54,7 +54,7 @@ class resumenController extends Controller
 
 
         #Valido los datos
-        #$DS_Items=null;
+        $DS_Items=null;
 
         try{
             #Llama al SP de validacion
@@ -78,6 +78,7 @@ class resumenController extends Controller
 
         }catch(\Exception $e)
         {
+            dd($e);
             $_Error=1;
         }
 

@@ -481,6 +481,63 @@
             </tfoot>
         </table>
 
+        <p style="page-break-after: always;">     
+        </p>
+        <table class="articulos" id="tabla3" name="tabla3" style="counter-reset: page;">
+
+            <thead class="item-head">
+                <tr>
+                    <td style="width: 10%">
+                        SKU
+                    </td>
+                    <td style="width: 35%">
+                        Articulo
+                    </td>
+                    <td style="width: 15%">
+                        Ean13
+                    </td>
+                    <td style="width: 10%">
+                        Lote
+                    </td>
+                    <td style="width: 10%">
+                        Vencimiento
+                    </td>
+                    <td style="width: 10%">
+                        UM
+                    </td>
+                    <td style="width: 10%">
+                        Cantidad
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+                
+                @foreach ($data['articulos'] as $item)
+                <tr>
+                    <td>{{$item['codigo']}}</td>
+                    <td>{{$item['descripcion']}}</td>
+                    <td>{{$item['ean13']}}</td>
+                    <td>{{$item['lote']}}</td>
+                    <td>{{
+                            (strtotime($item['fecha_vencimiento'])> 0)?date_format(date_create($item['fecha_vencimiento']), 'd/m/Y'):'-'    
+                    }}</td>
+                    <td>{{ $item['unidad_medida']}}</td>
+                    <td class="cantidad">{{$item['cantidad']}}</td>
+                </tr>
+
+                @endforeach
+
+            </tbody>
+            <tfoot class="footer">
+                <tr>
+                    <td colspan="2" class="etiqueta_copia">TOTAL de LINEAS</td>
+                    <td colspan="2">{{ count($data['articulos'])  }}</td>
+                    <td colspan="3" class="cantidad">{{$data->articulos->sum('cantidad')}}</td>
+                </tr>
+                <tr>
+                    <td colspan="7" class="original-duplicado"> <span class="original-duplicado"> TRIPICADO </span></td>
+                </tr>
+            </tfoot>
     </main>
 
 

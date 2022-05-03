@@ -54,7 +54,7 @@ class HomeController extends Controller
 
         }
 
-        $remitos = $remitos->orderBy('remitos.created_at', 'desc')
+        $remitos = $remitos->orderBy('remitos.numero_remito', 'desc')
                     ->with('customer');
 
         // $remitos = $remitos->toSql();
